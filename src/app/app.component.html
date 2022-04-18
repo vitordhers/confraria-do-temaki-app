@@ -1,0 +1,85 @@
+<ion-app>
+  <div class="fade-element"
+       [ngClass]="{'hidden shrink': (navigationService.currentHeader$ | async) !== 'regular'}">
+
+    <ion-menu contentId="main-content"
+              menuId="main-menu"
+              type="overlay"
+              side="end">
+      <ion-content>
+        <ion-list class="navigation-list">
+          <ion-menu-toggle>
+            <ion-item *ngIf="authService.isUserAuthenticated$ | async"
+                      class="navigation-item right"
+                      routerDirection="root"
+                      [routerLink]="['admin', { outlets: { admin: 'products' } }]"
+                      lines="none"
+                      detail="false"
+                      routerLinkActive="selected">
+              <ion-icon slot="start"
+                        name="star-sharp"></ion-icon>
+              Painel
+            </ion-item>
+          </ion-menu-toggle>
+          <ion-menu-toggle menu="main-menu"
+                           auto-hide="false"
+                           *ngFor="let p of navigationService.appPages; let i = index">
+            <ion-item class="navigation-item right"
+                      routerDirection="root"
+                      [routerLink]="[p.url]"
+                      lines="none"
+                      detail="false"
+                      routerLinkActive="selected">
+              <ion-icon slot="start"
+                        [ios]="p.icon + '-outline'"
+                        [md]="p.icon + '-sharp'"></ion-icon>
+              <ion-label>{{ p.title }}</ion-label>
+            </ion-item>
+          </ion-menu-toggle>
+        </ion-list>
+      </ion-content>
+    </ion-menu>
+
+    <ion-toolbar *ngIf="navigationService.headerState$ | async as state"
+                 class="header-toolbar"
+                 mode="md"
+                 [style.--background]="state.color"
+                 [ngClass]="{minimized: state.minimized}">
+      <div slot="start">
+        <ion-img class="logo"
+                 src="assets/img/logo.png"
+                 alt="Logo Confraria do Temaki"
+                 (click)="navigationService.navigate('/home')">
+
+        </ion-img>
+      </div>
+      <ion-buttons class="buttons"
+                   slot="end">
+        <ion-button class="ion-hide-md-down navigation-button button"
+                    *ngIf="authService.isUserAuthenticated$ | async"
+                    [routerLink]="['/admin', { outlets: { admin: 'produtos' } }]">
+          <ion-icon slot="start"
+                    name="star-sharp"></ion-icon>
+          Painel
+        </ion-button>
+        <ion-button class="button-text"
+                    fill="clear"
+                    *ngFor="let p of navigationService.appPages"
+                    class="ion-hide-md-down navigation-button button"
+                    [color]="p.url === navigationService.currentPage ? 'primary':'' "
+                    [routerLink]="p.url">{{p.title}}</ion-button>
+        <ion-button class="outline-button button"
+                    fill="outline"
+                    (click)="navigateExternalLink('https://deliverydireto.com.br/confrariadotemaki/confrariadotemaki')">
+          DELIVERY</ion-button>
+        <ion-menu-button menu="main-menu"
+                         menu="main-menu"
+                         class="ion-hide-md-up">
+        </ion-menu-button>
+      </ion-buttons>
+    </ion-toolbar>
+    <ion-router-outlet id="main-content"></ion-router-outlet>
+  </div>
+
+  <app-admin-menu></app-admin-menu>
+</ion-app>

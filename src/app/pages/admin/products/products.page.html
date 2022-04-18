@@ -1,0 +1,59 @@
+<ion-content>
+  <ion-toolbar color="transparent">
+    <ion-buttons slot="start">
+      <div>
+        <app-input [placeholder]="'Pesquisar'"
+                   [name]="'search'"
+                   [initialValue]="initialValue"
+                   (value)="search($event)"></app-input>
+      </div>
+    </ion-buttons>
+    <ion-buttons slot="end"
+                 *ngIf="authService.isUserAdmin$ | async">
+      <ion-button color="primary"
+                  fill="solid"
+                  (click)="presentModal()">
+        <ion-icon name="add-circle-sharp"
+                  slot="start"></ion-icon>
+        <ion-label>
+          Adicionar novo produto
+        </ion-label>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar color="transparent"
+               *ngIf="categoriesService.categories$ | async as categories">
+    <ion-list>
+      <ion-item lines="none">
+        <ion-label>Categoria</ion-label>
+        <ion-select placeholder="Selecione uma categoria"
+                    (ionChange)="setResult($event, false)">
+          <ion-select-option *ngFor="let category of categories"
+                             [value]="category.slug">{{category.name}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+  </ion-toolbar>
+  <ion-grid>
+    <ion-row *ngIf="displayedProducts$ | async as displayProducts"
+             class="products-row">
+      <ng-container *ngIf="displayProducts.length; else emptyResults">
+        <ion-col class="ion-no-padding product-col"
+                 size="12"
+                 size-sm="6"
+                 size-xl="4"
+                 *ngFor="let product of displayProducts">
+          <app-display-product [product]="product"
+                               [editable]="(authService.user$ | async) ? true : false"></app-display-product>
+        </ion-col>
+      </ng-container>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+
+<ng-template #emptyResults>
+  <ion-col>
+    <h2 class="headline">Não foi possível encontrar nenhum produto para essa
+      pesquisa</h2>
+  </ion-col>
+</ng-template>

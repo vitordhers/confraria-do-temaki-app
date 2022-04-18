@@ -1,0 +1,246 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="headline">{{unit?.name || 'Nova Unidade'}} {{unit?.location ? ', ' + unit.location : ''}}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button shape="round"
+                  color="primary"
+                  (click)="dismiss()">
+        <ion-icon name="close-sharp"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content [formGroup]="form">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12"
+               size-md="5"
+               offset-md="1">
+        <app-input name="name"
+                   label="Nome"
+                   [maxlength]="100"
+                   (value)="changeControl(form, 'name', $event)"
+                   [initialValue]="form.controls['name'].value">
+          <ion-item *ngIf="form.controls['name'].invalid && (form.controls['name'].dirty || form.controls['name'].touched)"
+                    class="validation-note"
+                    lines="none">
+            <div>
+              <ion-label *ngIf="form.controls['name'].errors?.['required']"
+                         color="danger">
+                Preencha o Campo
+              </ion-label>
+              <ion-label *ngIf="form.controls['name'].errors?.['minlength']"
+                         color="danger">
+                O nome deve ter pelo menos 5 letras
+              </ion-label>
+              <ion-label *ngIf="form.controls['name'].errors?.['maxlength']"
+                         color="danger">
+                O nome deve ter até 100 letras
+              </ion-label>
+            </div>
+            <ion-icon name="warning"
+                      slot="end"
+                      color="danger"></ion-icon>
+          </ion-item>
+        </app-input>
+      </ion-col>
+      <ion-col size="12"
+               size-md="5">
+        <app-input name="location"
+                   label="Localização"
+                   [maxlength]="200"
+                   (value)="changeControl(form, 'location', $event)"
+                   [initialValue]="form.controls['location'].value">
+          <ion-item *ngIf="form.controls['location'].invalid && (form.controls['location'].dirty || form.controls['location'].touched)"
+                    class="validation-note"
+                    lines="none">
+            <div>
+              <ion-label *ngIf="form.controls['location'].errors?.['required']"
+                         color="danger">
+                Preencha o Campo
+              </ion-label>
+              <ion-label *ngIf="form.controls['location'].errors?.['minlength']"
+                         color="danger">
+                Este campo deve ter pelo menos 5 caracteres
+              </ion-label>
+              <ion-label *ngIf="form.controls['location'].errors?.['maxlength']"
+                         color="danger">
+                Este campo deve ter até 100 caracteres
+              </ion-label>
+            </div>
+            <ion-icon name="warning"
+                      slot="end"
+                      color="danger"></ion-icon>
+          </ion-item>
+        </app-input>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12"
+               size-md="10"
+               offset-md="1">
+        <app-input name="address"
+                   type="textarea"
+                   [maxlength]="200"
+                   label="Endereço"
+                   (value)="changeControl(form, 'address', $event)"
+                   [initialValue]="form.controls['address'].value">
+          <ion-item *ngIf="form.controls['address'].invalid && (form.controls['address'].dirty || form.controls['address'].touched)"
+                    class="validation-note"
+                    lines="none">
+            <div>
+              <ion-label *ngIf="form.controls['address'].errors?.['required']"
+                         color="danger">
+                Preencha o Campo
+              </ion-label>
+              <ion-label *ngIf="form.controls['address'].errors?.['minlength']"
+                         color="danger">
+                Este Campo deve ter pelo menos 6 caracteres
+              </ion-label>
+              <ion-label *ngIf="form.controls['address'].errors?.['maxlength']"
+                         color="danger">
+                Este Campo deve ter deve ter até 200 caracteres
+              </ion-label>
+            </div>
+            <ion-icon name="warning"
+                      slot="end"
+                      color="danger"></ion-icon>
+          </ion-item>
+        </app-input>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12"
+               size-md="10"
+               offset-md="1">
+        <google-map height="400px"
+                    width="100%"
+                    [zoom]="16"
+                    [center]="center">
+          <map-marker [position]="center"
+                      [options]="{draggable: true}"
+                      (mapDragend)="dragEnd($event)">
+          </map-marker>
+        </google-map>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12"
+               size-md="5"
+               offset-md="1">
+        <app-input name="telephone"
+                   [maxlength]="14"
+                   type="tel"
+                   phoneType="telephone"
+                   label="Telefone"
+                   (value)="changeControl(form, 'telephone', $event)"
+                   [initialValue]="form.controls['telephone'].value">
+          <ion-item *ngIf="form.controls['telephone'].invalid && (form.controls['telephone'].dirty || form.controls['telephone'].touched)"
+                    class="validation-note"
+                    lines="none">
+            <div>
+              <ion-label *ngIf="form.controls['telephone'].errors?.['required']"
+                         color="danger">
+                Preencha o Campo
+              </ion-label>
+              <ion-label *ngIf="form.controls['telephone'].errors?.['minlength']"
+                         color="danger">
+                O telefone, com o código de área, deve ter pelo menos 10
+                dígitos
+              </ion-label>
+              <ion-label *ngIf="form.controls['telephone'].errors?.['maxlength']"
+                         color="danger">
+                O telefone, com o código de área, deve ter até 10
+                dígitos
+              </ion-label>
+            </div>
+            <ion-icon name="warning"
+                      slot="end"
+                      color="danger"></ion-icon>
+          </ion-item>
+        </app-input>
+      </ion-col>
+      <ion-col size="12"
+               size-md="5">
+        <app-input name="whatsapp"
+                   [maxlength]="16"
+                   type="tel"
+                   phoneType="celphone"
+                   label="Whatsapp"
+                   (value)="changeControl(form, 'whatsapp', $event)"
+                   [initialValue]="form.controls['whatsapp'].value">
+          <ion-item *ngIf="form.controls['whatsapp'].invalid && (form.controls['whatsapp'].dirty || form.controls['whatsapp'].touched)"
+                    class="validation-note"
+                    lines="none">
+            <div>
+              <ion-label *ngIf="form.controls['whatsapp'].errors?.['required']"
+                         color="danger">
+                Preencha o Campo
+              </ion-label>
+              <ion-label *ngIf="form.controls['whatsapp'].errors?.['minlength']"
+                         color="danger">
+                O celular, com o código de área, deve ter pelo menos 11
+                dígitos
+              </ion-label>
+              <ion-label *ngIf="form.controls['whatsapp'].errors?.['maxlength']"
+                         color="danger">
+                O celular, com o código de área, deve ter até 11 dígitos
+              </ion-label>
+            </div>
+            <ion-icon name="warning"
+                      slot="end"
+                      color="danger"></ion-icon>
+          </ion-item>
+        </app-input>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12"
+               size-md="10"
+               offset-md="1">
+        <ion-title class="subheadline"> Horários de Funcionamento
+        </ion-title>
+        <div>
+          <ion-chip *ngFor="let workingHours of form.controls['workingHours'].value; let i = index"
+                    (click)="removeWorkingHoursChip(i)">
+            <ion-label>{{workingHours}}</ion-label>
+            <ion-icon color="danger"
+                      name="close"></ion-icon>
+          </ion-chip>
+        </div>
+        <ion-item lines="none">
+          <ion-input type="text"
+                     placeholder="Adicionar Horário de Funcionamento"
+                     inputmode="text"
+                     appBreakingSpace
+                     (valueSubmit)="addWorkingHoursChip($event)"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button fill="solid"
+                  color="danger"
+                  (click)="dismiss()">
+        <ion-icon name="close-sharp"
+                  slot="start"></ion-icon>
+        <ion-label>Cancelar</ion-label>
+      </ion-button>
+      <ion-button fill="solid"
+                  color="success"
+                  [disabled]="!form.valid || loaders.submit"
+                  (click)="submit()">
+        <ion-icon *ngIf="!loaders.submit"
+                  name="save-sharp"
+                  slot="start"></ion-icon>
+        <ion-spinner *ngIf="loaders.submit"
+                     slot="start"></ion-spinner>
+        <ion-label>{{ loaders.submit ? 'Salvando...': 'Salvar'}}</ion-label>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

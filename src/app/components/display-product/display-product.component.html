@@ -1,0 +1,36 @@
+<ion-card class="card">
+  <ion-card-header (click)="presentModal()">
+    <ion-img class="product-img"
+             src="{{ product.imageUrl || 'assets/img/products/'+product.slug + '.jpg' }}"
+             [alt]="product.name">
+    </ion-img>
+    <ion-card-title class="product-title">{{ product.name }}</ion-card-title>
+  </ion-card-header>
+
+  <ion-card-content>
+    <ion-list class="transparent-list">
+      <ion-item class="button-text item-line"
+                lines="none"
+                [detail]="false">
+        <ion-label class="ion-no-margin">
+          {{ product.description }}
+        </ion-label>
+      </ion-item>
+      <ion-item class="item-line"
+                lines="none"
+                [detail]="false">
+        <ion-label slot="start">
+          {{ product.price[0].price | currency: "BRL" }}
+        </ion-label>
+        <ion-buttons *ngIf="editable"
+                     slot="end">
+          <ion-fab-button size="small"
+                          color="primary"
+                          (click)="presentModal($event)">
+            <ion-icon name="pencil-sharp"></ion-icon>
+          </ion-fab-button>
+        </ion-buttons>
+      </ion-item>
+    </ion-list>
+  </ion-card-content>
+</ion-card>

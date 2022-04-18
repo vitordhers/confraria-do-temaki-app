@@ -1,0 +1,108 @@
+<ion-content>
+  <div class="bg-image main">
+    <form [formGroup]="form">
+      <ion-grid class="grid">
+        <ion-row class="landing-row">
+          <ion-col size="6"
+                   offset="3"
+                   size-md="2"
+                   offset-md="5">
+            <h1 class="ion-text-center">Login</h1>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="6"
+                   offset="3"
+                   size-md="2"
+                   offset-md="5">
+            <app-input name="email"
+                       label="Email"
+                       [maxlength]="50"
+                       (value)="changeControl('email', $event)">
+              <ion-item *ngIf="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)"
+                        class="validation-note"
+                        lines="none">
+                <div>
+                  <ion-label *ngIf="form.controls['email'].errors?.['required']"
+                             color="danger">
+                    Preencha o Campo
+                  </ion-label>
+                  <ion-label *ngIf="form.controls['email'].errors?.['minlength']"
+                             color="danger">
+                    O e-mail deve ter pelo menos 6 caracteres
+                  </ion-label>
+                  <ion-label *ngIf="form.controls['email'].errors?.['maxlength']"
+                             color="danger">
+                    O e-mail deve ter até 50 caracteres
+                  </ion-label>
+                  <ion-label *ngIf="form.controls['email'].errors?.['email']"
+                             color="danger">
+                    Insira um e-mail válido
+                  </ion-label>
+                </div>
+                <ion-icon name="warning"
+                          slot="end"
+                          color="danger"></ion-icon>
+              </ion-item>
+            </app-input>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="6"
+                   offset="3"
+                   size-md="2"
+                   offset-md="5">
+            <app-input name="password"
+                       [type]="isPasswordShown ? 'text': 'password'"
+                       label="
+                       Senha"
+                       [maxlength]="20"
+                       (value)="changeControl('password', $event)">
+              <ion-item *ngIf="form.controls['password'].invalid && (form.controls['password'].dirty || form.controls['password'].touched)"
+                        class="validation-note"
+                        lines="none">
+                <div>
+                  <ion-label *ngIf="form.controls['password'].errors?.['required']"
+                             color="danger">
+                    Preencha o Campo
+                  </ion-label>
+                </div>
+                <ion-icon name="warning"
+                          slot="end"
+                          color="danger"></ion-icon>
+              </ion-item>
+            </app-input>
+          </ion-col>
+          <ion-col size="1">
+            <ion-button size="small"
+                        fill="clear"
+                        shape="round"
+                        (click)="isPasswordShown = !isPasswordShown">
+              <ion-icon [name]="isPasswordShown ? 'eye': 'eye-off'"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="6"
+                   offset="3"
+                   size-md="2"
+                   offset-md="5">
+            <ion-button [disabled]="loaders.submit"
+                        expand="block"
+                        (click)="signIn()">
+              <ng-container *ngIf="loaders.submit">
+                <ion-spinner slot="start"></ion-spinner>
+                <ion-label>
+                  Entrando...
+                </ion-label>
+              </ng-container>
+              <ion-label *ngIf="!loaders.submit">
+                Entrar
+              </ion-label>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+  </div>
+</ion-content>

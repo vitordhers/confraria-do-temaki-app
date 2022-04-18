@@ -1,0 +1,14 @@
+<ion-tabs *ngIf="{isAdmin: this.authService.isUserAdmin$ | async} as context">
+  <ion-tab-bar slot="bottom"
+               class="ion-hide-md-up">
+    <ng-container *ngFor="let page of navigationService.adminPages">
+      <ion-tab-button *ngIf="!page.adminOnly || page.adminOnly === context.isAdmin"
+                      [tab]="page.url">
+        <ion-icon [name]="page.icon"></ion-icon>
+        <ion-label>{{page.title}}</ion-label>
+        <ion-badge *ngIf="page.url === 'mensagens' && messagesService.newLeads + messagesService.newMessages > 0">
+          {{messagesService.newLeads + messagesService.newMessages}}</ion-badge>
+      </ion-tab-button>
+    </ng-container>
+  </ion-tab-bar>
+</ion-tabs>

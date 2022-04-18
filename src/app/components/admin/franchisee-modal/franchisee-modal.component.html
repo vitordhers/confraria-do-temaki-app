@@ -1,0 +1,274 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="headline">{{franchisee?.name || 'Novo Franqueado'}} {{franchisee?.surname}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button shape="round"
+                  color="primary"
+                  (click)="dismiss()">
+        <ion-icon name="close-sharp"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <form [formGroup]="form">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12"
+                 size-md="5"
+                 offset-md="1">
+          <app-input name="name"
+                     label="Nome"
+                     [maxlength]="100"
+                     [initialValue]="form.controls['name'].value"
+                     (value)="changeControl('name', $event)">
+            <ion-item *ngIf="form.controls['name'].invalid && (form.controls['name'].dirty || form.controls['name'].touched)"
+                      class="validation-note"
+                      lines="none">
+              <div>
+                <ion-label *ngIf="form.controls['name'].errors?.['required']"
+                           color="danger">
+                  Preencha o Campo
+                </ion-label>
+                <ion-label *ngIf="form.controls['name'].errors?.['minlength']"
+                           color="danger">
+                  O nome deve ter pelo menos 5 letras
+                </ion-label>
+                <ion-label *ngIf="form.controls['name'].errors?.['maxlength']"
+                           color="danger">
+                  O nome deve ter até 100 letras
+                </ion-label>
+              </div>
+              <ion-icon name="warning"
+                        slot="end"
+                        color="danger"></ion-icon>
+            </ion-item>
+          </app-input>
+        </ion-col>
+        <ion-col size="12"
+                 size-md="5">
+          <app-input name="surname"
+                     label="Sobrenome"
+                     [maxlength]="100"
+                     [initialValue]="form.controls['surname'].value"
+                     (value)="changeControl('surname', $event)">
+            <ion-item *ngIf="form.controls['surname'].invalid && (form.controls['surname'].dirty || form.controls['surname'].touched)"
+                      class="validation-note"
+                      lines="none">
+              <div>
+                <ion-label *ngIf="form.controls['surname'].errors?.['required']"
+                           color="danger">
+                  Preencha o Campo
+                </ion-label>
+                <ion-label *ngIf="form.controls['surname'].errors?.['minlength']"
+                           color="danger">
+                  O sobrenome deve ter pelo menos 5 letras
+                </ion-label>
+                <ion-label *ngIf="form.controls['surname'].errors?.['maxlength']"
+                           color="danger">
+                  O sobrenome deve ter até 100 letras
+                </ion-label>
+              </div>
+              <ion-icon name="warning"
+                        slot="end"
+                        color="danger"></ion-icon>
+            </ion-item>
+          </app-input>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12"
+                 size-md="5"
+                 offset-md="1">
+          <app-input name="email"
+                     label="Email"
+                     [maxlength]="50"
+                     (value)="changeControl('email', $event)"
+                     [initialValue]="form.controls['email'].value">
+            <ion-item *ngIf="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)"
+                      class="validation-note"
+                      lines="none">
+              <div>
+                <ion-label *ngIf="form.controls['email'].errors?.['required']"
+                           color="danger">
+                  Preencha o Campo
+                </ion-label>
+                <ion-label *ngIf="form.controls['email'].errors?.['minlength']"
+                           color="danger">
+                  O e-mail deve ter pelo menos 6 caracteres
+                </ion-label>
+                <ion-label *ngIf="form.controls['email'].errors?.['maxlength']"
+                           color="danger">
+                  O e-mail deve ter até 50 caracteres
+                </ion-label>
+                <ion-label *ngIf="form.controls['email'].errors?.['email']"
+                           color="danger">
+                  Insira um e-mail válido
+                </ion-label>
+              </div>
+              <ion-icon name="warning"
+                        slot="end"
+                        color="danger"></ion-icon>
+            </ion-item>
+          </app-input>
+        </ion-col>
+        <ion-col size="12"
+                 size-md="5">
+          <app-input name="role"
+                     type="select"
+                     label="Função"
+                     [initialValue]="form.controls['role'].value"
+                     [options]="roleOptions"
+                     (value)="changeControl('role', $event)">
+            <ion-item *ngIf="form.controls['role'].invalid && (form.controls['role'].dirty || form.controls['role'].touched)"
+                      class="validation-note"
+                      lines="none">
+              <div>
+                <ion-label *ngIf="form.controls['role'].errors?.['required']"
+                           color="danger">
+                  Preencha o Campo
+                </ion-label>
+              </div>
+              <ion-icon name="warning"
+                        slot="end"
+                        color="danger"></ion-icon>
+            </ion-item>
+          </app-input>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12"
+                 size-md="10"
+                 offset-md="1">
+          <h2 class="headline">Unidades</h2>
+          <ion-item *ngIf="form.controls['unitsOwnedIds'].invalid"
+                    class="validation-note"
+                    lines="none">
+            <div>
+              <ion-label *ngIf="form.controls['unitsOwnedIds'].errors?.['atLeastOneRequired']"
+                         color="danger">
+                Selecione pelo menos uma unidade
+              </ion-label>
+            </div>
+            <ion-icon name="warning"
+                      slot="end"
+                      color="danger"></ion-icon>
+          </ion-item>
+          <ion-chip *ngFor="let unit of unitService.units$ | async"
+                    (click)="toggleChip(unit.id)"
+                    [color]="form.controls['unitsOwnedIds'].value.includes(unit.id) ? 'success' : 'dark'">
+            <ion-label>
+              {{unit.name}}
+            </ion-label>
+          </ion-chip>
+        </ion-col>
+      </ion-row>
+      <ng-container *ngIf="!franchisee">
+        <ion-row>
+          <ion-col size="12"
+                   size-md="5"
+                   offset-md="1">
+            <h2 class="headline">Senhas</h2>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="12"
+                   size-md="4"
+                   offset-md="1">
+            <app-input name="password"
+                       [type]="isPasswordShown ? 'text': 'password'"
+                       label="
+                       Senha"
+                       [maxlength]="20"
+                       (value)="changePasswordControl('password', $event)">
+              <ion-item *ngIf="passwordsControl.controls['password'].invalid && (passwordsControl.controls['password'].dirty || passwordsControl.controls['password'].touched)"
+                        class="validation-note"
+                        lines="none">
+                <div>
+                  <ion-label *ngIf="passwordsControl.controls['password'].errors?.['required']"
+                             color="danger">
+                    Preencha o Campo
+                  </ion-label>
+                  <ion-label *ngIf="passwordsControl.controls['password'].errors?.['pattern']"
+                             color="danger">
+                    A senha deve ter pelo menos uma letra minúscula, uma letra maiúsculo, um número, um caractere
+                    especial e 8 caracteres
+                  </ion-label>
+                </div>
+                <ion-icon name="warning"
+                          slot="end"
+                          color="danger"></ion-icon>
+              </ion-item>
+            </app-input>
+          </ion-col>
+          <ion-col size="1">
+            <ion-button size="small"
+                        fill="clear"
+                        shape="round"
+                        (click)="isPasswordShown = !isPasswordShown">
+              <ion-icon [name]="isPasswordShown ? 'eye': 'eye-off'"></ion-icon>
+            </ion-button>
+          </ion-col>
+          <ion-col size="12"
+                   size-md="4">
+            <app-input name="cPassword"
+                       [type]="isConfirmPasswordShown ? 'text': 'password'"
+                       label="Confirmar a Senha"
+                       [maxlength]="20"
+                       (value)="changePasswordControl('cPassword', $event)">
+              <ion-item *ngIf="passwordsControl.invalid && (passwordsControl.dirty || passwordsControl.touched)"
+                        class="validation-note"
+                        lines="none">
+                <div>
+                  <ion-label *ngIf="passwordsControl.controls['cPassword'].errors?.['required']"
+                             color="danger">
+                    Preencha o Campo
+                  </ion-label>
+                  <ion-label *ngIf="passwordsControl.errors?.['equalsTo']"
+                             color="danger">
+                    A confirmação da Senha deve ser igual à Senha
+                  </ion-label>
+                </div>
+                <ion-icon name="warning"
+                          slot="end"
+                          color="danger"></ion-icon>
+              </ion-item>
+            </app-input>
+          </ion-col>
+          <ion-col size="1">
+            <ion-button size="small"
+                        fill="clear"
+                        shape="round"
+                        (click)="isConfirmPasswordShown = !isConfirmPasswordShown">
+              <ion-icon [name]="isConfirmPasswordShown ? 'eye': 'eye-off'"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ng-container>
+    </ion-grid>
+  </form>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button fill="solid"
+                  color="danger"
+                  (click)="dismiss()">
+        <ion-icon name="close-sharp"
+                  slot="start"></ion-icon>
+        <ion-label>Cancelar</ion-label>
+      </ion-button>
+      <ion-button fill="solid"
+                  color="success"
+                  [disabled]="!form.valid || loaders.submit"
+                  (click)="submit()">
+        <ion-icon *ngIf="!loaders.submit"
+                  name="save-sharp"
+                  slot="start"></ion-icon>
+        <ion-spinner *ngIf="loaders.submit"
+                     slot="start"></ion-spinner>
+        <ion-label>{{ loaders.submit ? 'Salvando...': 'Salvar'}}</ion-label>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

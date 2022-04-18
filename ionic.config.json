@@ -1,0 +1,7 @@
+{
+  "name": "confraria-do-temaki",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

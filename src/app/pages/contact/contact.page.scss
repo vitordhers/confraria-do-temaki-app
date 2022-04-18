@@ -1,0 +1,38 @@
+.bg-image {
+  background-image: linear-gradient(
+      359.78deg,
+      #080808 44.72%,
+      rgba(48, 48, 48, 0.7) 100%,
+      rgba(0, 0, 0, 0) 87.02%
+    ),
+    linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("/assets/img/be-franchised-bg.jpg");
+}
+
+.map-wrapper {
+  height: 400px;
+}
+
+.unit-column {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.unit-card {
+  width: 300px;
+  height: 300px;
+
+  .unit-card-content {
+    display: flex;
+    flex-flow: column wrap;
+    justify-content: space-between;
+    height: 70%;
+  }
+
+  h4,
+  ion-card-title,
+  ion-card-subtitle {
+    color: #fff;
+  }
+}

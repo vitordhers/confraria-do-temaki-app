@@ -1,0 +1,636 @@
+<ng-container *ngIf="product$ | async as product">
+  <ion-header>
+    <ion-toolbar>
+      <ion-button *ngIf="layoutService.isMobile"
+                  slot="start"
+                  fill="clear"
+                  color="dark"
+                  (click)="close()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+      <ng-container *ngTemplateOutlet="editable && isAdmin ? titleEditTpl : titleDisplayTpl;
+                    context:{ name: editable && isAdmin ? editProductForm.controls['name'].value : product.name}">
+      </ng-container>
+      <ion-fab-button *ngIf="!layoutService.isMobile"
+                      class="close-button"
+                      slot="end"
+                      (click)="close()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content>
+    <form [formGroup]="editProductForm">
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12"
+                   size-md="6"
+                   class="sticky">
+            <div class="img-upload-section">
+              <input type="file"
+                     class="image-input"
+                     accept="image/jpg, image/jpeg, image/png"
+                     (change)="handleFileInput($event.target)"
+                     #fileInput />
+            </div>
+            <div class="img-wrapper"
+                 (mouseenter)="editable ? imageHover(true) : null"
+                 (mouseleave)="editable ? imageHover(false) : null"
+                 (click)="editable ? handleFileUpload() : null">
+              <img class="cover-img"
+                   [ngClass]="{'image-editable': editable, 'hovered': imageHovered}"
+                   src="{{imgSrc}}" />
+              <ion-icon *ngIf="editable && isAdmin"
+                        class="upload-action"
+                        [ngClass]="{'displayed': imageHovered}"
+                        [name]="imgSrc === 'assets/img/products/none.jpg' ? 'cloud-upload-outline' : 'reload-outline'">
+              </ion-icon>
+              <ion-progress-bar *ngIf="displayProgressBar"
+                                [value]="progress"
+                                buffer="1"></ion-progress-bar>
+            </div>
+          </ion-col>
+          <ion-col size="12"
+                   size-md="6">
+            <ion-accordion-group *ngIf="editable">
+              <ion-accordion value="colors"
+                             [toggleIcon]="'cog-sharp'">
+                <ion-item slot="header">
+                  <ion-title class="bodylarge">Configurações</ion-title>
+                </ion-item>
+
+                <ion-list slot="content">
+                  <ion-item lines="none"
+                            *ngIf="isAdmin">
+                    <app-input name="rank"
+                               type="number"
+                               label="Posição"
+                               [initialValue]="editProductForm.controls['rank'].value"
+                               [min]="1"
+                               [max]="9998"
+                               (value)="changeProductControl('rank', $event)">
+                      <ion-item *ngIf="editProductForm.controls['rank'].invalid && (editProductForm.controls['rank'].dirty || editProductForm.controls['rank'].touched)"
+                                class="validation-note"
+                                lines="none">
+                        <div>
+                          <ion-label *ngIf="editProductForm.controls['rank'].errors?.['min']"
+                                     color="danger">
+                            Insira um número maior que 1.
+                          </ion-label>
+                          <ion-label *ngIf="editProductForm.controls['rank'].errors?.['max']"
+                                     color="danger">
+                            Insira um número menor que 9998
+                          </ion-label>
+                        </div>
+                        <ion-icon name="warning"
+                                  slot="end"
+                                  color="danger"></ion-icon>
+                      </ion-item>
+                    </app-input>
+                  </ion-item>
+                  <ion-item lines="none"
+                            *ngIf="isAdmin">
+                    <ion-icon name="bookmark"
+                              slot="start"></ion-icon>
+                    <ion-label>Listado na home</ion-label>
+                    <ion-toggle color="success"
+                                formControlName="requested"></ion-toggle>
+                  </ion-item>
+                  <ion-item lines="none">
+                    <ion-icon name="storefront-sharp"
+                              slot="start"></ion-icon>
+                    <ion-label>Unidades disponíveis</ion-label>
+                  </ion-item>
+                  <ion-row>
+                    <ion-col>
+                      <ion-chip *ngFor="let unit of editableUnits$ | async; let i = index"
+                                (click)="editProductForm.controls['unitsAvailable'].value.includes(unit.id)
+                              ? deleteByIndex(i, 'unitsAvailable', false)
+                              : markChip('unitsAvailable', unit.id)"
+                                [color]="editProductForm.controls['unitsAvailable'].value.includes(unit.id) ? 'success' : 'dark'">
+                        <ion-label>
+                          {{unit.name}}
+                        </ion-label>
+                      </ion-chip>
+                    </ion-col>
+                  </ion-row>
+                  <ion-item lines="none"
+                            *ngIf="isAdmin">
+                    <ion-icon name="apps-outline"
+                              slot="start"></ion-icon>
+                    <ion-label>Categorias do Produto</ion-label>
+                  </ion-item>
+                  <ion-row>
+                    <ion-col *ngIf="isAdmin">
+                      <ion-chip *ngFor="let category of categoriesService.categories$| async; let i = index"
+                                (click)="editProductForm.controls['categoriesIds'].value.includes(category.id)
+                                ? deleteByIndex(i, 'categoriesIds', false)
+                                : markChip('categoriesIds', category.id)"
+                                [color]="editProductForm.controls['categoriesIds'].value.includes(category.id) ? 'success' : 'dark'">
+                        <ion-label>
+                          {{category.name}}
+                        </ion-label>
+                      </ion-chip>
+                    </ion-col>
+                  </ion-row>
+                </ion-list>
+              </ion-accordion>
+            </ion-accordion-group>
+            <ion-list *ngIf="currentUnitId$ | async as currentUnit">
+              <ng-container
+                            *ngTemplateOutlet="editable && isAdmin ? pricesEditTpl : pricesDisplayTpl;
+                    context:{ prices: editable ? editProductForm.controls['price'].value : product.price, currentUnit}">
+              </ng-container>
+
+              <ng-container
+                            *ngTemplateOutlet="editable && isAdmin ? descriptioEditTpl : descriptionDisplayTpl;
+                    context:{ description: editable ? editProductForm.controls['description'].value : product.description}">
+              </ng-container>
+
+              <ng-container *ngTemplateOutlet="editable && isAdmin ? stringArrayEditTpl : conditionsDisplayTpl;
+                            context:{ controlName: 'conditions', items: editable ? editProductForm.controls['conditions'].value : product.conditions,
+                            label: 'Condição', headline: 'Condições'}">
+              </ng-container>
+
+              <ng-container *ngTemplateOutlet="editable && isAdmin ? stringArrayEditTpl : notesDisplayTpl;
+                            context:{ controlName: 'notes', items: editable ? editProductForm.controls['notes'].value : product.notes,
+                            label: 'Nota', headline: 'Notas'}">
+              </ng-container>
+
+              <ng-container
+                            *ngTemplateOutlet="editable && isAdmin ? ingredientsEditTpl : ingredientsDisplayTpl;
+                            context:{ ingredients: editable ? editProductForm.controls['ingredients'].value : product.ingredients }">
+              </ng-container>
+            </ion-list>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </form>
+  </ion-content>
+  <ion-footer *ngIf="editable">
+    <ion-toolbar>
+      <ion-buttons slot="end">
+        <ion-button *ngIf="product.id"
+                    color="danger"
+                    fill="solid"
+                    [disabled]="!canSave"
+                    (click)="exclude()">
+          <ion-icon name="trash-bin-sharp"
+                    slot="start"></ion-icon>
+          <ion-label>
+            Apagar
+          </ion-label>
+        </ion-button>
+        <ion-button color="success"
+                    fill="solid"
+                    [disabled]="!canSave"
+                    (click)="save()">
+          <ion-icon name="save-sharp"
+                    slot="start"></ion-icon>
+          <ion-label>
+            {{product.id ? 'Salvar' : 'Adicionar'}}
+          </ion-label>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-footer>
+</ng-container>
+
+<ng-template #titleDisplayTpl
+             let-name="name">
+  <ion-title class="title ion-text-nowrap ion-text-center headline">
+    {{ name }}
+  </ion-title>
+</ng-template>
+
+<ng-template #titleEditTpl
+             let-name="name">
+  <ion-row>
+    <ion-col size="10">
+      <app-input name="name"
+                 label="Título"
+                 [maxlength]="100"
+                 placeholder="Temaki..."
+                 [initialValue]="editProductForm.controls['name'].value"
+                 (value)="changeProductControl('name', $event)">
+        <ion-item *ngIf="editProductForm.controls['name'].invalid && (editProductForm.controls['name'].dirty || editProductForm.controls['name'].touched)"
+                  class="validation-note"
+                  lines="none">
+          <div>
+            <ion-label *ngIf="editProductForm.controls['name'].errors?.['required']"
+                       color="danger">
+              Preencha o Campo
+            </ion-label>
+            <ion-label *ngIf="editProductForm.controls['name'].errors?.['minlength']"
+                       color="danger">
+              O nome deve ter pelo menos 5 letras
+            </ion-label>
+            <ion-label *ngIf="editProductForm.controls['name'].errors?.['maxlength']"
+                       color="danger">
+              O nome deve ter até 100 letras
+            </ion-label>
+          </div>
+          <ion-icon name="warning"
+                    slot="end"
+                    color="danger"></ion-icon>
+        </ion-item>
+      </app-input>
+    </ion-col>
+    <ion-col size="2">
+      <app-input name="name"
+                 label="Referência"
+                 [maxlength]="50"
+                 placeholder="exemplo-de-referencia"
+                 [initialValue]="editProductForm.controls['slug'].value"
+                 [appLettersAndDashes]="true"
+                 (value)="changeProductControl('slug', $event)">
+        <ion-item *ngIf="editProductForm.controls['slug'].invalid && (editProductForm.controls['slug'].dirty || editProductForm.controls['slug'].touched)"
+                  class="validation-note"
+                  lines="none">
+          <div>
+            <ion-label *ngIf="editProductForm.controls['slug'].errors?.['required']"
+                       color="danger">
+              Preencha o Campo
+            </ion-label>
+            <ion-label *ngIf="editProductForm.controls['slug'].errors?.['minlength']"
+                       color="danger">
+              A referência deve ter pelo menos 3 letras
+            </ion-label>
+            <ion-label *ngIf="editProductForm.controls['slug'].errors?.['maxlength']"
+                       color="danger">
+              A referência deve ter até 50 letras
+            </ion-label>
+          </div>
+          <ion-icon name="warning"
+                    slot="end"
+                    color="danger"></ion-icon>
+        </ion-item>
+      </app-input>
+    </ion-col>
+  </ion-row>
+
+</ng-template>
+
+<ng-template #pricesDisplayTpl
+             let-prices="prices"
+             let-currentUnit="currentUnit">
+  <ion-toolbar color="transparent">
+    <ion-title class="subheadline"> Preço{{prices.length > 1 ?
+      's' : ''}}
+    </ion-title>
+  </ion-toolbar>
+  <ion-item lines="none"
+            *ngFor="let price of prices">
+    <ion-label *ngIf="currentUnit === price.unitId">
+      <b *ngIf="price.size">
+        {{price.size}} -
+      </b>{{ price.price | currency: "BRL"}}
+    </ion-label>
+  </ion-item>
+</ng-template>
+
+<ng-template #pricesEditTpl
+             let-prices="prices"
+             let-currentUnit="currentUnit">
+  <ion-toolbar color="transparent">
+    <ion-title class="subheadline"> Preços
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button shape="round"
+                  (click)="addPrice()">
+        <ion-icon [name]="isAddingIndexes['price'] ? 'close-sharp' : 'add-sharp'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-row>
+      <ion-col>
+        <app-input name="currentId"
+                   type="select"
+                   label="Unidade"
+                   [initialValue]="unitService.currentUnitId$.value"
+                   [options]="unitList$ | async"
+                   (value)="changeCurrentUnit($event)">
+        </app-input>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+  <ion-toolbar *ngIf="isAddingIndexes['price']"
+               color="primary">
+    <div [formGroup]="addPriceForm"
+         class="flex-toolbar">
+      <div>
+        <ion-item lines="none">
+          <ion-label position="stacked"
+                     color="primary">
+            Preço
+          </ion-label>
+          <ion-input inputmode="decimal"
+                     type="number"
+                     formControlName="price"></ion-input>
+        </ion-item>
+      </div>
+      <div>
+        <ion-item lines="none">
+          <ion-label position="stacked"
+                     color="primary">
+            Tamanho
+          </ion-label>
+          <ion-input placeholder="(ou unidade)"
+                     formControlName="size"></ion-input>
+        </ion-item>
+      </div>
+    </div>
+    <ng-container *ngTemplateOutlet="popoverTpl;
+        context:{controlName: 'price', index: 'newPrice', mode: 'add'}">
+    </ng-container>
+  </ion-toolbar>
+  <ion-list [formGroup]="editPriceForm">
+    <ng-container *ngFor="let price of prices; let i = index">
+      <ion-toolbar *ngIf="currentUnit === price.unitId"
+                   [color]="isEditingIndexes['price'] !== i ? 'transparent' : 'primary'">
+        <div>
+          <ion-item lines="none">
+            <ion-label position="stacked"
+                       color="primary">
+              Preço
+            </ion-label>
+            <span *ngIf="isEditingIndexes['price'] !== i">{{price.price | currency: "BRL"}}</span>
+            <ion-input *ngIf="isEditingIndexes['price'] === i"
+                       inputmode="decimal"
+                       type="number"
+                       formControlName="price"></ion-input>
+          </ion-item>
+        </div>
+        <div>
+          <ion-item lines="none">
+            <ion-label position="stacked"
+                       color="primary">
+              Tamanho
+            </ion-label>
+            <span *ngIf="isEditingIndexes['price'] !== i">{{price.size}}</span>
+            <ion-input *ngIf="isEditingIndexes['price'] === i"
+                       placeholder="(ou unidade)"
+                       formControlName="size"></ion-input>
+          </ion-item>
+        </div>
+        <ng-container *ngTemplateOutlet="popoverTpl;
+                      context:{controlName: 'price', index: i, mode: 'edit'}">
+        </ng-container>
+      </ion-toolbar>
+    </ng-container>
+  </ion-list>
+</ng-template>
+
+<ng-template #descriptionDisplayTpl
+             let-description="description">
+  <ion-item lines="none"
+            *ngIf="description">
+    <ion-label class="ion-text-wrap">
+      {{description}}
+    </ion-label>
+  </ion-item>
+</ng-template>
+
+<ng-template #descriptioEditTpl
+             let-description="description">
+  <ion-row>
+    <ion-col>
+      <app-input name="description"
+                 type="textarea"
+                 [maxlength]="1000"
+                 label="Descrição"
+                 [initialValue]=" description === '' ? null: description"
+                 (value)="changeProductControl('description', $event)">
+        <ion-item *ngIf="editProductForm.controls['description'].invalid && (editProductForm.controls['description'].dirty || editProductForm.controls['description'].touched)"
+                  class="validation-note"
+                  lines="none">
+          <div>
+            <ion-label *ngIf="editProductForm.controls['description'].errors?.['minlength']"
+                       color="danger">
+              Este Campo deve ter pelo menos 10 caracteres
+            </ion-label>
+            <ion-label *ngIf="editProductForm.controls['description'].errors?.['maxlength']"
+                       color="danger">
+              Este Campo deve ter deve ter até 1000 caracteres
+            </ion-label>
+          </div>
+          <ion-icon name="warning"
+                    slot="end"
+                    color="danger"></ion-icon>
+        </ion-item>
+      </app-input>
+    </ion-col>
+  </ion-row>
+</ng-template>
+
+<ng-template #notesDisplayTpl
+             let-items="items">
+  <ion-list *ngIf="items?.length">
+    <ion-item lines="none"
+              *ngFor="let note of items">
+      <ion-label class="ion-text-wrap">{{note}}</ion-label>
+    </ion-item>
+  </ion-list>
+</ng-template>
+
+<ng-template #conditionsDisplayTpl
+             let-items="items">
+  <ng-container *ngIf="items?.length">
+
+    <ion-title class="subheadline"> Condições </ion-title>
+    <ion-list>
+      <ion-item lines="none"
+                *ngFor="let condition of items">
+        <ion-label class="ion-text-wrap">{{condition}}</ion-label>
+      </ion-item>
+    </ion-list>
+  </ng-container>
+</ng-template>
+
+<ng-template #stringArrayEditTpl
+             let-items="items"
+             let-controlName="controlName"
+             let-headline="headline"
+             let-label="label">
+  <ion-toolbar color="transparent">
+    <ion-title class="subheadline"> {{headline}} </ion-title>
+    <ion-buttons slot="end">
+      <ion-button shape="round"
+                  (click)="addStringArray(controlName)">
+        <ion-icon [name]="isAddingIndexes[controlName] ? 'close-sharp' : 'add-sharp'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar *ngIf="isAddingIndexes[controlName]"
+               color="primary">
+    <ion-item lines="none">
+      <app-input [name]="controlName"
+                 [label]="label"
+                 type="textarea"
+                 (value)="changeStringArrayControl('add', controlName, $event)">
+      </app-input>
+    </ion-item>
+    <ng-container *ngTemplateOutlet="popoverTpl;
+        context:{controlName, index: 'new'+controlName, mode: 'add'}">
+    </ng-container>
+  </ion-toolbar>
+  <ion-list *ngIf="items?.length">
+    <ion-item lines="none"
+              *ngFor="let item of items; let i = index">
+      <ion-label *ngIf="isEditingIndexes['notes'] !== i"
+                 class="ion-text-wrap">{{item}}</ion-label>
+      <app-input *ngIf="isEditingIndexes['notes'] === i"
+                 [name]="controlName"
+                 [label]="label"
+                 type="textarea"
+                 [initialValue]="item"
+                 (value)="changeStringArrayControl('edit', controlName, $event)">
+      </app-input>
+      <ng-container *ngTemplateOutlet="popoverTpl;
+        context:{controlName, index: i, mode: 'edit'}">
+      </ng-container>
+    </ion-item>
+  </ion-list>
+</ng-template>
+
+<ng-template #ingredientsEditTpl
+             let-ingredients="ingredients">
+  <ion-toolbar color="transparent">
+    <ion-title class="subheadline"> Ingredientes
+    </ion-title>
+    <ion-buttons *ngIf="editable"
+                 slot="end">
+      <ion-button shape="round"
+                  (click)="isAddingIndexes['ingredients'] = !isAddingIndexes['ingredients']; isEditingIndexes['ingredients'] = undefined">
+        <ion-icon [name]="isAddingIndexes['ingredients'] ? 'close-sharp' : 'add-sharp'"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar *ngIf="isAddingIndexes['ingredients']"
+               color="primary">
+    <ion-list [formGroup]="addIngredientsForm">
+      <ion-item lines="none">
+        <ion-label color="primary">
+          Exibir
+        </ion-label>
+        <ion-checkbox color="primary"
+                      formControlName="display"></ion-checkbox>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label color="primary">
+          Ingrediente
+        </ion-label>
+        <ion-input placeholder="(ou grupo de ingredientes)"
+                   formControlName="title"></ion-input>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label color="primary">
+          Opções
+        </ion-label>
+      </ion-item>
+      <div>
+        <ion-chip *ngFor="let option of addIngredientsForm.controls['options'].value; let i = index"
+                  (click)="removeOptionChip('add', i)">
+          <ion-label>{{option}}</ion-label>
+          <ion-icon color="danger"
+                    name="close"></ion-icon>
+        </ion-chip>
+      </div>
+      <ion-item lines="none">
+        <ion-input type="text"
+                   placeholder="Adicionar opção"
+                   inputmode="text"
+                   appBreakingSpace
+                   (valueSubmit)="addOptionChip('add', $event)"></ion-input>
+      </ion-item>
+    </ion-list>
+    <ng-container *ngTemplateOutlet="popoverTpl;
+                  context:{controlName: 'ingredients', index: 'newIngredient', mode: 'add'}">
+    </ng-container>
+  </ion-toolbar>
+  <ion-list [formGroup]="editIngredientsForm">
+    <ion-toolbar *ngFor="let ingredient of ingredients; let i = index"
+                 [color]="isEditingIndexes['ingredients'] !== i ? 'transparent' : 'primary'">
+      <ion-item lines="none">
+        <ion-label color="primary">
+          Exibir
+        </ion-label>
+        <ion-icon *ngIf="isEditingIndexes['ingredients'] !== i"
+                  [name]="ingredient.display ? 'checkmark-circle-sharp' : 'close-circle-sharp'"
+                  [color]="ingredient.display ? 'success' : 'danger'"></ion-icon>
+        <ion-checkbox *ngIf="isEditingIndexes['ingredients'] === i"
+                      color="primary"
+                      formControlName="display"></ion-checkbox>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label color="primary">
+          Ingrediente
+        </ion-label>
+        <ion-label *ngIf="isEditingIndexes['ingredients'] !== i">
+          {{ingredient.title}}
+        </ion-label>
+        <ion-input *ngIf="isEditingIndexes['ingredients'] === i"
+                   placeholder="(ou grupo de ingredientes)"
+                   formControlName="title"></ion-input>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-label color="primary">
+          Opções
+        </ion-label>
+      </ion-item>
+      <ion-item lines="none">
+        <div *ngIf="isEditingIndexes['ingredients'] !== i">
+          <ion-chip *ngFor="let option of ingredient.options">
+            <ion-label>{{option}}</ion-label>
+          </ion-chip>
+        </div>
+        <div *ngIf="isEditingIndexes['ingredients'] === i">
+          <ion-chip *ngFor="let option of editIngredientsForm.controls['options'].value; let idx = index"
+                    (click)="removeOptionChip('edit', idx)">
+            <ion-label>{{option}}</ion-label>
+            <ion-icon color="danger"
+                      name="close"></ion-icon>
+          </ion-chip>
+        </div>
+      </ion-item>
+      <ion-item lines="none"
+                *ngIf="isEditingIndexes['ingredients'] === i">
+        <ion-input type="text"
+                   placeholder="Adicionar opção"
+                   inputmode="text"
+                   appBreakingSpace
+                   (valueSubmit)="addOptionChip('edit', $event)"></ion-input>
+      </ion-item>
+      <ng-container *ngTemplateOutlet="popoverTpl;
+                    context:{controlName: 'ingredients', index: i, mode: 'edit'}">
+      </ng-container>
+    </ion-toolbar>
+  </ion-list>
+</ng-template>
+
+<ng-template #ingredientsDisplayTpl
+             let-ingredients="ingredients">
+  <ng-container *ngFor="let ingredient of ingredients">
+    <ng-container *ngIf="ingredient.display">
+      <ion-label class="headline">{{ingredient.title}}
+      </ion-label>
+      <ion-item lines="none"
+                *ngFor="let option of ingredient.options">
+        <ion-label>
+          ⚫ {{option}}
+        </ion-label>
+      </ion-item>
+    </ng-container>
+  </ng-container>
+</ng-template>
+
+<ng-template #popoverTpl
+             let-i="index"
+             let-controlName="controlName"
+             let-mode="mode">
+  <ion-buttons slot="end">
+    <ion-button shape="round"
+                (click)="mode === 'add' ? openAddPopover($event, i, controlName) : openEditPopover($event, i, controlName)">
+      <ion-icon name="ellipsis-vertical-sharp"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+</ng-template>

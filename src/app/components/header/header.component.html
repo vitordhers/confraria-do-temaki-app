@@ -1,0 +1,30 @@
+<ion-toolbar *ngIf="navigationService.headerState$ | async as state"
+             class="header-toolbar"
+             mode="md"
+             [style.--background]="state.color"
+             [ngClass]="{minimized: state.minimized}">
+  <div slot="start">
+    <ion-img class="logo"
+             src="assets/img/logo.png"
+             alt="Logo Confraria do Temaki"
+             (click)="navigationService.navigate('/home')">
+
+    </ion-img>
+  </div>
+  <ion-buttons class="buttons"
+               slot="end">
+    <ion-button class="button-text"
+                fill="clear"
+                *ngFor="let p of navigationService.appPages"
+                class="ion-hide-md-down navigation-button button"
+                [ngClass]="{'selected': p.url === navigationService.currentPage}"
+                (click)="navigationService.navigate(p.url)">{{p.title}}
+    </ion-button>
+    <ion-button class="outline-button button"
+                fill="outline"
+                (click)="navigateExternalLink('https://deliverydireto.com.br/confrariadotemaki/confrariadotemaki')">
+      DELIVERY</ion-button>
+    <ion-menu-button class="ion-hide-md-up">
+    </ion-menu-button>
+  </ion-buttons>
+</ion-toolbar>

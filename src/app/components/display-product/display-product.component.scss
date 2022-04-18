@@ -1,0 +1,40 @@
+.card {
+  background: linear-gradient(
+      158.47deg,
+      rgba(255, 255, 255, 0.114) 6.15%,
+      rgba(34, 36, 40, 0.6) 55.64%
+    ),
+    #222428;
+  border-radius: 10px;
+  width: 280px;
+  height: 400px;
+}
+
+.product-img {
+  &::part(image) {
+    object-fit: cover;
+  }
+  width: 248px;
+  height: 230px;
+  border-radius: 10px;
+}
+
+.product-title {
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.item-line {
+  --background: transparent;
+  --inner-padding-start: 0px;
+  --inner-padding-end: 0px;
+  --padding-start: 0px;
+  --padding-end: 0px;
+}
+
+.transparent-list {
+  background: transparent;
+  padding: 0px 1em;
+}

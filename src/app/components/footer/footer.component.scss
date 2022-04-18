@@ -1,0 +1,63 @@
+ion-grid {
+  background-color: #0e0e0e;
+  ion-col {
+    padding: 40px 31px;
+  }
+}
+
+.footer-toolbar {
+  --background: transparent;
+  --padding-bottom: 10px;
+  --padding-end: 10px;
+  --padding-start: 10px;
+  --padding-top: 10px;
+}
+
+.logo {
+  height: 51px;
+}
+
+ion-list {
+  background: none;
+}
+.footer-item {
+  --background: transparent;
+  &.info {
+    --padding-start: 0px;
+  }
+
+  &.hour {
+    font-size: 14px !important;
+  }
+}
+
+h6.button-text {
+  font-size: 15px !important;
+}
+
+.hour-title {
+  padding-left: 16px;
+}
+
+ion-label {
+  padding-left: 6.5px;
+}
+
+@media only screen and (min-width: 768px) {
+  .footer-toolbar {
+    --padding-bottom: 56px;
+    --padding-end: 56px;
+    --padding-start: 56px;
+    --padding-top: 56px;
+  }
+  .logo {
+    width: 202px;
+    height: 83px;
+  }
+}
+
+.logo-wrapper {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}

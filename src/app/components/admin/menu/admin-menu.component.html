@@ -1,0 +1,52 @@
+<ion-split-pane contentId="admin-content"
+                class="fade-element"
+                [ngClass]="{'hidden shrink': (navigationService.currentHeader$ | async) === 'regular'}">
+
+  <ion-menu contentId="admin-content"
+            menuId="admin-menu">
+    <ion-content>
+      <ion-list class="navigation-list">
+        <ion-item>
+          <div class="mini-logo-wrapper">
+            <ion-img class="logo"
+                     src="assets/img/logo.png"
+                     alt="Logo Confraria do Temaki"
+                     (click)="navigationService.navigate('/home')"></ion-img>
+          </div>
+        </ion-item>
+        <ng-container *ngIf="{isAdmin: this.authService.isUserAdmin$ | async} as context">
+          <ion-menu-toggle menu="admin-menu"
+                           [autoHide]="false"
+                           *ngFor="let page of navigationService.adminPages">
+            <ion-item *ngIf="!page.adminOnly || page.adminOnly === context.isAdmin"
+                      class="navigation-item left"
+                      [routerLink]="['admin', { outlets: { admin: page.url } }]"
+                      lines="none"
+                      detail="false"
+                      routerLinkActive="selected"
+                      button>
+              <ion-icon [name]="page.icon"
+                        slot="start"></ion-icon>
+              <ion-label>
+                {{page.title}}
+              </ion-label>
+              <ion-badge *ngIf="page.url === 'mensagens' && messagesService.newLeads + messagesService.newMessages > 0"
+                         slot="end">
+                {{messagesService.newLeads + messagesService.newMessages}}
+              </ion-badge>
+            </ion-item>
+          </ion-menu-toggle>
+        </ng-container>
+        <ion-item (click)="authService.logout()"
+                  lines="none"
+                  button>
+          <ion-icon name="exit-outline"
+                    slot="start"></ion-icon>
+          <ion-label>Sair</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-content>
+  </ion-menu>
+  <ion-router-outlet id="admin-content"
+                     name="admin"></ion-router-outlet>
+</ion-split-pane>

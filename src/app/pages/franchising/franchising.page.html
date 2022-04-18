@@ -1,0 +1,459 @@
+<ion-content>
+  <app-scroll-trigger id="franchisingTrigger"></app-scroll-trigger>
+  <div class="bg-image main">
+    <ion-grid class="grid">
+      <ion-row class="landing-row">
+        <ion-col class="ion-text-center">
+          <h1 class="superheadline">
+            Seja um Franqueado
+          </h1>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12"
+                 size-md="4"
+                 offset-md="1">
+          <h2 class="headline">Por que ser um franqueado da Confaria?</h2>
+          <p class="bodylarge">
+            A confraria do temaki desenvolveu 2 opções de modelo de franquia,
+            sendo elas loja ou delivery (dark kitchen).
+          </p>
+
+          <ion-list class="bodylarge ion-no-padding">
+            <ion-item>
+              <ion-icon name="chevron-forward-sharp"
+                        slot="start"></ion-icon>
+              <ion-label class="ion-text-wrap">
+                Suporte ao franqueado nas áreas de administração, jurídica, e
+                operacional, além do auxílio na escolha do ponto;
+              </ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-icon name="chevron-forward-sharp"
+                        slot="start"></ion-icon>
+              <ion-label class="ion-text-wrap">
+                Fornecedores homologados de alta qualidade com ótimo
+                custo benefício;
+              </ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-icon name="chevron-forward-sharp"
+                        slot="start"></ion-icon>
+              <ion-label class="ion-text-wrap">
+                Operação simples e enxuta que requer baixa capacitação
+                pessoal;
+              </ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-icon name="chevron-forward-sharp"
+                        slot="start"></ion-icon>
+              <ion-label class="ion-text-wrap">
+                Treinamento inicial in loco e na matriz, garantindo ao
+                franqueado.
+              </ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-icon name="chevron-forward-sharp"
+                        slot="start"></ion-icon>
+              <ion-label class="ion-text-wrap">
+                Royalties escalonados de acordo com o faturamento.
+              </ion-label>
+            </ion-item>
+          </ion-list>
+
+          <ion-img class="franchise-img ion-hide-md-down"
+                   src="/assets/img/franchise.png"></ion-img>
+        </ion-col>
+        <ion-col size="12"
+                 size-md="5"
+                 offset-md="1">
+          <form class="form">
+            <ion-row>
+              <ion-col size="12"
+                       size-md="6">
+                <app-input name="name"
+                           label="Nome"
+                           [maxlength]="100"
+                           (value)="changeControl('name', $event)">
+                  <ion-item *ngIf="form.controls['name'].invalid && (form.controls['name'].dirty || form.controls['name'].touched)"
+                            class="validation-note"
+                            lines="none">
+                    <div>
+                      <ion-label *ngIf="form.controls['name'].errors?.['required']"
+                                 color="danger">
+                        Preencha o Campo
+                      </ion-label>
+                      <ion-label *ngIf="form.controls['name'].errors?.['minlength']"
+                                 color="danger">
+                        O nome deve ter pelo menos 5 letras
+                      </ion-label>
+                      <ion-label *ngIf="form.controls['name'].errors?.['maxlength']"
+                                 color="danger">
+                        O nome deve ter até 100 letras
+                      </ion-label>
+                    </div>
+                    <ion-icon name="warning"
+                              slot="end"
+                              color="danger"></ion-icon>
+                  </ion-item>
+                </app-input>
+              </ion-col>
+              <ion-col size="12"
+                       size-md="6">
+                <app-input name="email"
+                           label="Email"
+                           [maxlength]="50"
+                           (value)="changeControl('email', $event)">
+                  <ion-item *ngIf="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)"
+                            class="validation-note"
+                            lines="none">
+                    <div>
+                      <ion-label *ngIf="form.controls['email'].errors?.['required']"
+                                 color="danger">
+                        Preencha o Campo
+                      </ion-label>
+                      <ion-label *ngIf="form.controls['email'].errors?.['minlength']"
+                                 color="danger">
+                        O e-mail deve ter pelo menos 6 caracteres
+                      </ion-label>
+                      <ion-label *ngIf="form.controls['email'].errors?.['maxlength']"
+                                 color="danger">
+                        O e-mail deve ter até 50 caracteres
+                      </ion-label>
+                      <ion-label *ngIf="form.controls['email'].errors?.['email']"
+                                 color="danger">
+                        Insira um e-mail válido
+                      </ion-label>
+                    </div>
+                    <ion-icon name="warning"
+                              slot="end"
+                              color="danger"></ion-icon>
+                  </ion-item>
+                </app-input>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="12"
+                       size-md="6">
+                <app-input name="celphone"
+                           [maxlength]="16"
+                           type="tel"
+                           phoneType="celphone"
+                           label="Celular"
+                           (value)="changeControl('celphone', $event)">
+                  <ion-item *ngIf="form.controls['celphone'].invalid && (form.controls['celphone'].dirty || form.controls['celphone'].touched)"
+                            class="validation-note"
+                            lines="none">
+                    <div>
+                      <ion-label *ngIf="form.controls['celphone'].errors?.['required']"
+                                 color="danger">
+                        Preencha o Campo
+                      </ion-label>
+                      <ion-label *ngIf="form.controls['celphone'].errors?.['minlength']"
+                                 color="danger">
+                        O celular, com o código de área, deve ter pelo menos 11
+                        dígitos
+                      </ion-label>
+                      <ion-label *ngIf="form.controls['celphone'].errors?.['maxlength']"
+                                 color="danger">
+                        O celular, com o código de área, deve ter até 11 dígitos
+                      </ion-label>
+                    </div>
+                    <ion-icon name="warning"
+                              slot="end"
+                              color="danger"></ion-icon>
+                  </ion-item>
+                </app-input>
+              </ion-col>
+              <ion-col size="12"
+                       size-md="6">
+                <app-input name="telephone"
+                           [maxlength]="14"
+                           type="tel"
+                           phoneType="telephone"
+                           label="Telefone"
+                           (value)="changeControl('telephone', $event)">
+                  <ion-item *ngIf="form.controls['telephone'].invalid && (form.controls['telephone'].dirty || form.controls['telephone'].touched)"
+                            class="validation-note"
+                            lines="none">
+                    <div>
+                      <ion-label *ngIf="form.controls['telephone'].errors?.['required']"
+                                 color="danger">
+                        Preencha o Campo
+                      </ion-label>
+                      <ion-label *ngIf="form.controls['telephone'].errors?.['minlength']"
+                                 color="danger">
+                        O telefone, com o código de área, deve ter pelo menos 10
+                        dígitos
+                      </ion-label>
+                      <ion-label *ngIf="form.controls['telephone'].errors?.['maxlength']"
+                                 color="danger">
+                        O telefone, com o código de área, deve ter até 10
+                        dígitos
+                      </ion-label>
+                    </div>
+                    <ion-icon name="warning"
+                              slot="end"
+                              color="danger"></ion-icon>
+                  </ion-item>
+                </app-input>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="12"
+                       size-md="6">
+                <app-input name="state"
+                           type="select"
+                           label="Estado"
+                           [initialValue]="'SP'"
+                           [options]="stateOptions"
+                           (value)="changeControl('state', $event)">
+                  <ion-item *ngIf="form.controls['state'].invalid && (form.controls['state'].dirty || form.controls['state'].touched)"
+                            class="validation-note"
+                            lines="none">
+                    <div>
+                      <ion-label *ngIf="form.controls['state'].errors?.['required']"
+                                 color="danger">
+                        Preencha o Campo
+                      </ion-label>
+                    </div>
+                    <ion-icon name="warning"
+                              slot="end"
+                              color="danger"></ion-icon>
+                  </ion-item>
+                </app-input>
+              </ion-col>
+              <ion-col size="12"
+                       size-md="6">
+                <app-input name="city"
+                           [maxlength]="50"
+                           label="Cidade"
+                           (value)="changeControl('city', $event)">
+                  <ion-item *ngIf="form.controls['city'].invalid && (form.controls['city'].dirty || form.controls['city'].touched)"
+                            class="validation-note"
+                            lines="none">
+                    <div>
+                      <ion-label *ngIf="form.controls['city'].errors?.['required']"
+                                 color="danger">
+                        Preencha o Campo
+                      </ion-label>
+                      <ion-label *ngIf="form.controls['city'].errors?.['minlength']"
+                                 color="danger">
+                        O nome da cidade deve ter pelo menos 2 letras
+                      </ion-label>
+                      <ion-label *ngIf="form.controls['city'].errors?.['maxlength']"
+                                 color="danger">
+                        O nome da cidade deve ter deve ter até 50 letras
+                      </ion-label>
+                    </div>
+                    <ion-icon name="warning"
+                              slot="end"
+                              color="danger"></ion-icon>
+                  </ion-item>
+                </app-input>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="12"
+                       size-md="6">
+                <app-input name="reference"
+                           [maxlength]="100"
+                           label="Onde você nos conheceu?"
+                           (value)="changeControl('reference', $event)">
+                  <ion-item *ngIf="form.controls['reference'].invalid && (form.controls['reference'].dirty || form.controls['reference'].touched)"
+                            class="validation-note"
+                            lines="none">
+                    <div>
+                      <ion-label *ngIf="form.controls['reference'].errors?.['required']"
+                                 color="danger">
+                        Preencha o Campo
+                      </ion-label>
+                      <ion-label *ngIf="form.controls['reference'].errors?.['minlength']"
+                                 color="danger">
+                        Este Campo deve ter pelo menos 3 letras
+                      </ion-label>
+                      <ion-label *ngIf="form.controls['reference'].errors?.['maxlength']"
+                                 color="danger">
+                        Este Campo deve ter deve ter até 100 letras
+                      </ion-label>
+                    </div>
+                    <ion-icon name="warning"
+                              slot="end"
+                              color="danger"></ion-icon>
+                  </ion-item>
+                </app-input>
+              </ion-col>
+              <ion-col size="12"
+                       size-md="6">
+                <app-input name="investment"
+                           type="select"
+                           [initialValue]="initialValueInvestment"
+                           [options]="investmentOptions"
+                           label="Quanto espera investir?"
+                           (value)="changeControl('investment', $event)">
+                  <ion-item *ngIf="form.controls['investment'].invalid && (form.controls['investment'].dirty || form.controls['investment'].touched)"
+                            class="validation-note"
+                            lines="none">
+                    <div>
+                      <ion-label *ngIf="form.controls['investment'].errors?.['required']"
+                                 color="danger">
+                        Preencha o Campo
+                      </ion-label>
+                    </div>
+                    <ion-icon name="warning"
+                              slot="end"
+                              color="danger"></ion-icon>
+                  </ion-item>
+                </app-input>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="12">
+                <app-input name="message"
+                           type="textarea"
+                           [maxlength]="1000"
+                           label="Mensagem"
+                           (value)="changeControl('message', $event)">
+                  <ion-item *ngIf="form.controls['message'].invalid && (form.controls['message'].dirty || form.controls['message'].touched)"
+                            class="validation-note"
+                            lines="none">
+                    <div>
+                      <ion-label *ngIf="form.controls['message'].errors?.['required']"
+                                 color="danger">
+                        Preencha o Campo
+                      </ion-label>
+                      <ion-label *ngIf="form.controls['message'].errors?.['minlength']"
+                                 color="danger">
+                        Este Campo deve ter pelo menos 10 caracteres
+                      </ion-label>
+                      <ion-label *ngIf="form.controls['message'].errors?.['maxlength']"
+                                 color="danger">
+                        Este Campo deve ter deve ter até 1000 caracteres
+                      </ion-label>
+                    </div>
+                    <ion-icon name="warning"
+                              slot="end"
+                              color="danger"></ion-icon>
+                  </ion-item>
+                </app-input>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-button (click)="submitForm()" [disabled]="submitLoader">ENVIAR</ion-button>
+              </ion-col>
+            </ion-row>
+          </form>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="divider-column ion-hide-md-down">
+          <ion-img src="/assets/img/franchise-divider.png"></ion-img>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <h2 class="headline ion-text-center">Vantagens</h2>
+        </ion-col>
+      </ion-row>
+      <ion-row class="advantages-row">
+        <ion-col size="10"
+                 size-md="4">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-subtitle class="bodylarge ion-text-center">Faturamento
+                Médio
+              </ion-card-subtitle>
+              <ion-card-title class="headline ion-text-center">R$ 100.000,00
+              </ion-card-title>
+            </ion-card-header>
+          </ion-card>
+        </ion-col>
+        <ion-col size="10"
+                 size-md="4">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-subtitle class="bodylarge ion-text-center">Prazo Médio
+                de Retorno
+              </ion-card-subtitle>
+              <ion-card-title class="headline ion-text-center">12 a 24 Meses
+              </ion-card-title>
+            </ion-card-header>
+          </ion-card>
+        </ion-col>
+        <ion-col size="10"
+                 size-md="4">
+          <ion-card>
+            <ion-card-header>
+              <ion-card-subtitle class="bodylarge ion-text-center">Margem de
+                Lucro
+              </ion-card-subtitle>
+              <ion-card-title class="headline ion-text-center">15% a 20%
+              </ion-card-title>
+            </ion-card-header>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+      <ion-row class="investment-row">
+        <ion-col size="0"
+                 size-md="6"
+                 class="ion-hide-md-down">
+          <ion-img src="/assets/img/franchise-investment.png"></ion-img>
+        </ion-col>
+        <ion-col size="12"
+                 size-md="6">
+          <div class="text-wrapper">
+            <h2 class="headline ion-text-center">Investimento</h2>
+            <ion-list>
+              <ion-item>
+                <ion-icon name="chevron-forward-sharp"
+                          slot="start"></ion-icon>
+                <ion-label>
+                  Dark Kitchen
+                </ion-label>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-label class="ion-text-wrap bodylarge">
+                  Versáteis, práticas e alinhadas com a nova tendência de
+                  consumo
+                  dos clientes, as <i>Dark Kitchens</i> vêm se tornando cada vez
+                  mais
+                  lucrativas e são uma ótima opção para quem busca empreender no
+                  segmento
+                  Gastronomico, buscando menor investimento e maior facilidade
+                  operacional.
+                </ion-label>
+              </ion-item>
+              <ion-item>
+                <ion-icon name="chevron-forward-sharp"
+                          slot="start"></ion-icon>
+                <ion-label>
+                  Lojas Físicas
+                </ion-label>
+              </ion-item>
+              <ion-item lines="none">
+                <ion-label class="ion-text-wrap bodylarge">
+                  As lojas físicas contam com prévia aprovação do ponto
+                  comercial da nossa equipe, com layout e projeto arquitetônico
+                  padronizados.
+                  Dessa forma usamos o <i>know how</i> adquirido ao longo do
+                  tempo para
+                  otimizar a operação e por consequência majorar o lucro do
+                  investidor.
+                  Esse modelo de loja oferece atendimento ao público no espaço
+                  físico e também delivery.
+                </ion-label>
+              </ion-item>
+            </ion-list>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12">
+          <app-gallery></app-gallery>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <app-footer></app-footer>
+  </div>
+</ion-content>

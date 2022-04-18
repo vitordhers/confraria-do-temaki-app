@@ -1,0 +1,91 @@
+<ion-toolbar>
+  <ion-segment (ionChange)="segmentChanged($event)"
+               value="leads">
+    <ion-segment-button value="leads">
+      <ion-label>Contatos de Franquia</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="messages">
+      <ion-label>Mensagens</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+</ion-toolbar>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12"
+               size-md="8"
+               offset-md="2">
+        <ng-container *ngIf="currentMessageType === 'leads'">
+          <ion-list *ngIf="messageService.loadedFranchisingLeads$ | async as leads">
+            <ion-item *ngFor="let lead of leads"
+                      [color]="!lead.readAt ? 'success': ''"
+                      (click)="displayMessageModal(lead)"
+                      button>
+              <ion-avatar slot="start">
+                <img
+                     src="https://eu.ui-avatars.com/api/?name={{lead.name.replace(' ', '+')}}&rounded=true&background=random">
+              </ion-avatar>
+              <ion-label>
+                {{lead.message }}
+              </ion-label>
+              <ion-label slot="end">
+                {{lead.sentAt * 1000 | date:'longDate':undefined:'pt-BR'}}
+              </ion-label>
+              <ion-icon slot="end"
+                        [name]="lead.readAt ? 'checkmark-done-sharp':'checkmark-sharp'"
+                        [color]="lead.readAt ? 'secondary':''"></ion-icon>
+            </ion-item>
+            <ion-item *ngIf="this.disableLeadsPagination">
+              <ion-label>
+                Todas as mensagens foram carregadas.
+              </ion-label>
+            </ion-item>
+          </ion-list>
+          <ion-infinite-scroll #leadsScroll
+                               threshold="100px"
+                               (ionInfinite)="loadData('leads')">
+            <ion-infinite-scroll-content loadingSpinner="bubbles"
+                                         loadingText="Loading more data...">
+            </ion-infinite-scroll-content>
+          </ion-infinite-scroll>
+        </ng-container>
+        <div class="messages-container"
+             *ngIf="currentMessageType === 'messages'">
+          <ion-list *ngIf="messageService.loadedMessageContacts$ | async as messages">
+            <ion-item *ngFor="let message of messages"
+                      [color]="!message.readAt ? 'success': ''"
+                      (click)="displayMessageModal(message)"
+                      button>
+              <ion-avatar slot="start">
+                <img
+                     src="https://eu.ui-avatars.com/api/?name={{message.name.replace(' ', '+')}}&rounded=true&background=random">
+              </ion-avatar>
+              <ion-label>
+                {{message.message }}
+              </ion-label>
+              <ion-label slot="end">
+                {{message.sentAt * 1000 | date:'longDate':undefined:'pt-BR'}}
+              </ion-label>
+              <ion-icon slot="end"
+                        [name]="message.readAt ? 'checkmark-done-sharp':'checkmark-sharp'"
+                        [color]="message.readAt ? 'secondary':''"></ion-icon>
+            </ion-item>
+            <ion-item *ngIf="this.disableMessagesPagination">
+              <ion-label>
+                Todas as mensagens foram carregadas.
+              </ion-label>
+            </ion-item>
+          </ion-list>
+          <ion-infinite-scroll #messagesScroll
+                               threshold="100px"
+                               (ionInfinite)="loadData('messages')">
+            <ion-infinite-scroll-content loadingSpinner="bubbles"
+                                         loadingText="Carregando mensagens...">
+            </ion-infinite-scroll-content>
+          </ion-infinite-scroll>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

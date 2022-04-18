@@ -1,0 +1,156 @@
+<ion-content [fullscreen]="true">
+  <app-scroll-trigger id="homeTrigger"></app-scroll-trigger>
+  <div class="bg-image main">
+    <ion-grid class="grid">
+      <ion-row class="landing-row">
+        <ion-col size="10"
+                 offset="1"
+                 size-md="5"
+                 offset-md="1">
+          <h1 class="superheadline">
+            #vemPraConfra!
+          </h1>
+          <h2 class="subheadline">
+            Aqui seus momentos são especiais e únicos.
+            Trabalhamos com rodízio e à la carte!
+          </h2>
+          <ion-buttons class="action-buttons">
+            <ion-button color="primary"
+                        fill="solid"
+                        [expand]="layoutService.isMobile ? 'block': ''"
+                        routerLink="/cardapio"> VER
+              CARDÁPIO </ion-button>
+            <ion-button class="outline-button"
+                        fill="outline"
+                        color="dark"
+                        (click)="navigateExternalLink('https://deliverydireto.com.br/confrariadotemaki/confrariadotemaki')">
+              PEDIR NO DELIVERY</ion-button>
+          </ion-buttons>
+          <ion-buttons class="social-buttons">
+            <ion-fab-button color="medium"
+                            (click)="navigateExternalLink('https://www.facebook.com/confrariadotemaki')">
+              <ion-icon name="logo-facebook"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-button color="medium"
+                            (click)="navigateExternalLink('https://www.instagram.com/confrariadotemaki/')">
+              <ion-icon name="logo-instagram"></ion-icon>
+            </ion-fab-button>
+          </ion-buttons>
+        </ion-col>
+        <ion-col class="ion-hide-md-down"
+                 size="0"
+                 size-md="6">
+          <img src="assets/img/temaki-landing.png" />
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <div *ngIf="(requestedProducts$ | async) as requestedProducts">
+    <ion-grid *ngIf="requestedProducts.length"
+              class="ion-no-padding">
+      <ion-row>
+        <ion-col class="requested-headline-row"
+                 offset="1">
+          <h2 class="headline">Os mais pedidos</h2>
+
+          <ion-buttons class="slider-buttons">
+            <ion-button (click)="slides.slidePrev()">
+              <ion-icon slot="icon-only"
+                        size="large"
+                        name="chevron-back-sharp"></ion-icon>
+            </ion-button>
+            <ion-button (click)="slides.slideNext()">
+              <ion-icon slot="icon-only"
+                        size="large"
+                        name="chevron-forward-sharp"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-slides [options]="sliderOptions">
+            <ion-slide *ngFor="let product of requestedProducts">
+              <app-display-product [product]="product"></app-display-product>
+            </ion-slide>
+          </ion-slides>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="more-column">
+          <ion-buttons class="action-buttons">
+            <ion-button class="outline-button"
+                        fill="outline"
+                        color="dark"
+                        routerLink="/cardapio">
+              VER MAIS
+            </ion-button>
+          </ion-buttons>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <div>
+    <ion-grid class="ion-no-padding">
+      <ion-row>
+        <ion-col class="ion-no-padding">
+          <div class="who-we-are-bg ion-hide-md-down">
+          </div>
+        </ion-col>
+      </ion-row>
+      <ion-row class="who-we-are-col">
+        <ion-col size="10"
+                 offset="1"
+                 size-md="4"
+                 offset-md="1">
+          <h1 class="headline">Quem Somos</h1>
+          <p class="bodylarge">
+            A confraria do temaki surgiu em 2018 com o objetivo de entregar o
+            melhor da culinária japonesa aos clientes, em um ambiente moderno e
+            uma alimentação saudável. Atrelando qualidade, agilidade e
+            padronização em seus processos, destacou-se entre seus concorrentes,
+            tornando-se referência do segmento na região.
+          </p>
+        </ion-col>
+        <ion-col size="10"
+                 offset="1"
+                 size-md="6">
+          <img class="who-we-are-img"
+               src="assets/img/who-we-are-img.jpg"
+               alt="Fachada Confraria">
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+  <div class="franchising bg-image">
+    <ion-grid>
+      <ion-row>
+        <ion-col class="ion-text-center"
+                 size="8"
+                 offset="2">
+
+          <p class="product-title">
+            <ion-icon name="location-outline"></ion-icon>
+            Rede de Franquias
+          </p>
+          <h1 class="superheadline">Seja um Franqueado</h1>
+          <p class="bodylarge">Venha fazer parte dessa história de sucesso</p>
+          <ion-buttons class="action-buttons">
+            <ion-button class="outline-button"
+                        fill="outline"
+                        color="dark"
+                        routerLink="/seja-um-franqueado">SABER MAIS</ion-button>
+          </ion-buttons>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
+
+  <div>
+    <app-gallery></app-gallery>
+  </div>
+
+  <app-footer></app-footer>
+
+</ion-content>

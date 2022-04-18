@@ -1,0 +1,45 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title> {{!message.readAt ? 'Nova' : ''}} Mensagem de {{message.name}} ({{message.sentAt * 1000 | date}})
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="message-content">
+    Prezado Rhudner,
+    <br>
+    você recebeu uma mensagem no site da Confraria do Temaki.
+    <table>
+      <tr>
+        <td><b>Nome</b></td>
+        <td>{{message.name}}</td>
+      </tr>
+      <tr>
+        <td><b>Id no Banco de Dados</b></td>
+        <td>{{message.id}}</td>
+      </tr>
+      <tr>
+        <td><b>E-mail</b></td>
+        <td>{{message.email}}</td>
+      </tr>
+      <tr>
+        <td>
+          <b>Mensagem</b>
+        </td>
+        <td>
+          {{message.message}}
+        </td>
+      </tr>
+    </table>
+    <br>
+    <p>
+      Espero que essa mensagem o ajude a aprimorar sua franquia. 😃
+      Abraço!
+    </p>
+  </div>
+</ion-content>

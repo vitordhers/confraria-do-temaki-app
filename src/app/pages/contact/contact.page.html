@@ -1,0 +1,177 @@
+<ion-content>
+  <app-scroll-trigger id="contactTrigger"></app-scroll-trigger>
+  <div class="bg-image main">
+    <ion-grid class="grid">
+      <ion-row class="landing-row">
+        <ion-col class="ion-text-center">
+          <h1 class="superheadline">
+            Contato
+          </h1>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="10"
+                 offset="1"
+                 size-md="4">
+          <h2 class="headline">Mande uma Mensagem</h2>
+          <p class="bodylarge">
+            Escreva sua mensagem com dúvidas, críticas, sugestões ou elogios
+            para que possamos melhorar sempre nossos serviços
+          </p>
+        </ion-col>
+        <ion-col size="12"
+                 size-md="5"
+                 offset-md="1">
+          <form class="form">
+            <ion-row>
+              <ion-col size="12"
+                       size-md="6">
+                <app-input name="name"
+                           label="Nome"
+                           [maxlength]="100"
+                           (value)="changeControl('name', $event)">
+                  <ion-item *ngIf="form.controls['name'].invalid && (form.controls['name'].dirty || form.controls['name'].touched)"
+                            class="validation-note"
+                            lines="none">
+                    <div>
+                      <ion-label *ngIf="form.controls['name'].errors?.['required']"
+                                 color="danger">
+                        Preencha o Campo
+                      </ion-label>
+                      <ion-label *ngIf="form.controls['name'].errors?.['minlength']"
+                                 color="danger">
+                        O nome deve ter pelo menos 5 letras
+                      </ion-label>
+                      <ion-label *ngIf="form.controls['name'].errors?.['maxlength']"
+                                 color="danger">
+                        O nome deve ter até 100 letras
+                      </ion-label>
+                    </div>
+                    <ion-icon name="warning"
+                              slot="end"
+                              color="danger"></ion-icon>
+                  </ion-item>
+                </app-input>
+              </ion-col>
+              <ion-col size="12"
+                       size-md="6">
+                <app-input name="email"
+                           label="Email"
+                           [maxlength]="50"
+                           (value)="changeControl('email', $event)">
+                  <ion-item *ngIf="form.controls['email'].invalid && (form.controls['email'].dirty || form.controls['email'].touched)"
+                            class="validation-note"
+                            lines="none">
+                    <div>
+                      <ion-label *ngIf="form.controls['email'].errors?.['required']"
+                                 color="danger">
+                        Preencha o Campo
+                      </ion-label>
+                      <ion-label *ngIf="form.controls['email'].errors?.['minlength']"
+                                 color="danger">
+                        O e-mail deve ter pelo menos 6 caracteres
+                      </ion-label>
+                      <ion-label *ngIf="form.controls['email'].errors?.['maxlength']"
+                                 color="danger">
+                        O e-mail deve ter até 50 caracteres
+                      </ion-label>
+                      <ion-label *ngIf="form.controls['email'].errors?.['email']"
+                                 color="danger">
+                        Insira um e-mail válido
+                      </ion-label>
+                    </div>
+                    <ion-icon name="warning"
+                              slot="end"
+                              color="danger"></ion-icon>
+                  </ion-item>
+                </app-input>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="12">
+                <app-input name="message"
+                           type="textarea"
+                           [maxlength]="1000"
+                           label="Mensagem"
+                           (value)="changeControl('message', $event)">
+                  <ion-item *ngIf="form.controls['message'].invalid && (form.controls['message'].dirty || form.controls['message'].touched)"
+                            class="validation-note"
+                            lines="none">
+                    <div>
+                      <ion-label *ngIf="form.controls['message'].errors?.['required']"
+                                 color="danger">
+                        Preencha o Campo
+                      </ion-label>
+                      <ion-label *ngIf="form.controls['message'].errors?.['minlength']"
+                                 color="danger">
+                        Este Campo deve ter pelo menos 10 caracteres
+                      </ion-label>
+                      <ion-label *ngIf="form.controls['message'].errors?.['maxlength']"
+                                 color="danger">
+                        Este Campo deve ter deve ter até 1000 caracteres
+                      </ion-label>
+                    </div>
+                    <ion-icon name="warning"
+                              slot="end"
+                              color="danger"></ion-icon>
+                  </ion-item>
+                </app-input>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                <ion-button [disabled]="submitLoader"
+                            (click)="submitForm()">ENVIAR</ion-button>
+              </ion-col>
+            </ion-row>
+          </form>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="unit$ | async as unit">
+        <ion-col class="ion-no-padding">
+          <div class="map-wrapper">
+            <app-map [unit]="unit"
+                     [zoom]="16"></app-map>
+          </div>
+        </ion-col>
+      </ion-row>
+      <ng-container *ngIf="unitService.units$ | async as units">
+        <ion-row>
+          <ion-col size="10"
+                   offset="1">
+            <h2 class="headline">Nossas Unidades</h2>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngFor="let unit of units">
+          <ion-col class="unit-column"
+                   size="10"
+                   offset="1"
+                   size-md="3">
+            <ion-card class="unit-card tile-card">
+              <ion-card-header>
+                <ion-card-subtitle>{{ unit.location }}</ion-card-subtitle>
+                <ion-card-title class="product-title">{{ unit.name }}
+                </ion-card-title>
+              </ion-card-header>
+              <ion-card-content class="unit-card-content">
+                <h4 class="bodylarger">{{unit.telephone}}</h4>
+                <h4 class="bodylarge">{{unit.address}}</h4>
+                <ion-buttons>
+                  <ion-fab-button color="medium"
+                                  size="small">
+                    <ion-icon name="logo-instagram"></ion-icon>
+                  </ion-fab-button>
+                  <ion-fab-button color="medium"
+                                  size="small">
+                    <ion-icon name="location-sharp"></ion-icon>
+                  </ion-fab-button>
+                </ion-buttons>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+        </ion-row>
+      </ng-container>
+    </ion-grid>
+    <app-footer></app-footer>
+  </div>
+</ion-content>

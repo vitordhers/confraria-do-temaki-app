@@ -1,0 +1,62 @@
+<ion-content>
+  <ng-container *ngIf="!queryError; else emptyResults">
+    <ion-toolbar color="transparent">
+      <ion-buttons slot="end">
+        <ion-button color="primary"
+                    fill="solid"
+                    (click)="openFranchiseeModal()">
+          <ion-icon name="add-circle-sharp"
+                    slot="start"></ion-icon>
+          <ion-label>
+            Adicionar novo franqueado
+          </ion-label>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12"
+                 size-md="8"
+                 offset-md="2">
+          <ion-list *ngIf="users$ | async as franchisees">
+            <ion-item *ngFor="let franchisee of franchisees">
+              <ion-label>
+                {{franchisee.name}} {{franchisee.surname}}
+              </ion-label>
+              <ion-buttons slot="end">
+                <ion-button (click)="openFranchiseeModal(franchisee)">
+                  <ion-icon name="create-sharp"
+                            slot="start"></ion-icon>
+                  <ion-label>Editar</ion-label>
+                </ion-button>
+                <ion-button (click)="openEditPasswordModal(franchisee)">
+                  <ion-icon name="lock-open-sharp"
+                            slot="start"></ion-icon>
+                  <ion-label>Trocar senha</ion-label>
+                </ion-button>
+                <ion-button *ngIf="franchisee.role !== userRole.ADMIN"
+                            (click)="deleteUser(franchisee)">
+                  <ion-icon name="trash-bin-sharp"
+                            slot="start"></ion-icon>
+                  <ion-label>Excluir</ion-label>
+                </ion-button>
+
+              </ion-buttons>
+            </ion-item>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ng-container>
+</ion-content>
+
+<ng-template #emptyResults>
+  <ion-grid>
+    <ion-row class="products-row">
+    </ion-row>
+    <ion-col>
+      <h2 class="headline">Não foi possível encontrar nenhum franqueado. Por favor, recarregue a página.</h2>
+    </ion-col>
+  </ion-grid>
+</ng-template>

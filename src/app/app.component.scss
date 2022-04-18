@@ -1,0 +1,61 @@
+.header-toolbar {
+  width: 98.5vw;
+  --background: #00000000;
+  padding-top: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px;
+  padding-left: 10px;
+  transition: all 0.4s ease-in-out;
+}
+
+.logo {
+  height: 51px;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+}
+
+.button {
+  display: block;
+  height: 18px;
+}
+
+.navigation-button {
+  margin-left: 11px;
+  margin-right: 11px;
+}
+
+.outline-button {
+  height: 51px;
+  --background: transparent;
+  --border-radius: 10px !important;
+  --border-width: 1px;
+  --padding-top: 25px;
+  --padding-end: 25px;
+  --padding-bottom: 25px;
+  --padding-start: 25px;
+}
+
+@media only screen and (min-width: 768px) {
+  .header-toolbar:not(.minimized) {
+    padding-top: 56px;
+    padding-right: 56px;
+    padding-bottom: 56px;
+    padding-left: 56px;
+  }
+  .logo {
+    width: 202px;
+    height: 83px;
+  }
+}
+
+.mini-logo-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.selected {
+  --color: var(--ion-primary-color);
+}

@@ -1,0 +1,33 @@
+<ion-grid>
+  <ion-row>
+    <ion-col size="10"
+             offset="1">
+      <h1 class="headline">Galeria</h1>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="10"
+             offset="1">
+      <div class="container">
+        <ion-img *ngFor="let index of[1,2,3,4,5,6]"
+                 class="image image{{index}}"
+                 [ngClass]="{'ion-hide-md-down': index === 1 || index === 6}"
+                 src="assets/img/gallery/image{{index}}.png">
+        </ion-img>
+      </div>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
+      <ion-buttons class="action-buttons">
+        <ion-button class="outline-button"
+                    fill="outline"
+                    (click)="navigateExternalLink('https://www.instagram.com/confrariadotemaki/')">
+          <ion-icon name="logo-instagram"
+                    slot="start"></ion-icon>
+          VER MAIS
+        </ion-button>
+      </ion-buttons>
+    </ion-col>
+  </ion-row>
+</ion-grid>

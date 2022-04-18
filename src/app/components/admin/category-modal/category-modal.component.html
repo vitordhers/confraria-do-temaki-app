@@ -1,0 +1,169 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="headline">{{category?.name || 'Nova Categoria'}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button shape="round"
+                  color="primary"
+                  (click)="dismiss()">
+        <ion-icon name="close-sharp"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <form [formGroup]="form">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12"
+                 size-md="4"
+                 offset-md="1">
+          <app-input name="name"
+                     label="Nome"
+                     [maxlength]="50"
+                     [initialValue]="form.controls['name'].value"
+                     (value)="changeControl('name', $event)">
+            <ion-item *ngIf="form.controls['name'].invalid && (form.controls['name'].dirty || form.controls['name'].touched)"
+                      class="validation-note"
+                      lines="none">
+              <div>
+                <ion-label *ngIf="form.controls['name'].errors?.['required']"
+                           color="danger">
+                  Preencha o Campo
+                </ion-label>
+                <ion-label *ngIf="form.controls['name'].errors?.['minlength']"
+                           color="danger">
+                  O nome deve ter pelo menos 2 letras
+                </ion-label>
+                <ion-label *ngIf="form.controls['name'].errors?.['maxlength']"
+                           color="danger">
+                  O nome deve ter até 50 letras
+                </ion-label>
+              </div>
+              <ion-icon name="warning"
+                        slot="end"
+                        color="danger"></ion-icon>
+            </ion-item>
+          </app-input>
+        </ion-col>
+        <ion-col size="12"
+                 size-md="4">
+          <app-input name="slug"
+                     label="Fragmento"
+                     [maxlength]="20"
+                     [initialValue]="form.controls['slug'].value"
+                     [lettersAndDashes]="true"
+                     placeholder="exemplo-de-fragmento"
+                     (value)="changeControl('slug', $event)">
+            <ion-item *ngIf="form.controls['slug'].invalid && (form.controls['slug'].dirty || form.controls['slug'].touched)"
+                      class="validation-note"
+                      lines="none">
+              <div>
+                <ion-label *ngIf="form.controls['slug'].errors?.['required']"
+                           color="danger">
+                  Preencha o Campo
+                </ion-label>
+                <ion-label *ngIf="form.controls['slug'].errors?.['minlength']"
+                           color="danger">
+                  O fragmento deve ter pelo menos 2 letras
+                </ion-label>
+                <ion-label *ngIf="form.controls['slug'].errors?.['maxlength']"
+                           color="danger">
+                  O fragmento deve ter até 20 letras
+                </ion-label>
+              </div>
+              <ion-icon name="warning"
+                        slot="end"
+                        color="danger"></ion-icon>
+            </ion-item>
+          </app-input>
+        </ion-col>
+        <ion-col size="12"
+                 size-md="2">
+          <app-input name="rank"
+                     type="number"
+                     label="Posição"
+                     [initialValue]="form.controls['rank'].value"
+                     [min]="1"
+                     [max]="9998"
+                     (value)="changeControl('rank', $event)">
+            <ion-item *ngIf="form.controls['rank'].invalid && (form.controls['rank'].dirty || form.controls['rank'].touched)"
+                      class="validation-note"
+                      lines="none">
+              <div>
+                <ion-label *ngIf="form.controls['rank'].errors?.['min']"
+                           color="danger">
+                  Insira um número maior que 1.
+                </ion-label>
+                <ion-label *ngIf="form.controls['rank'].errors?.['max']"
+                           color="danger">
+                  Insira um número menor que 9998
+                </ion-label>
+              </div>
+              <ion-icon name="warning"
+                        slot="end"
+                        color="danger"></ion-icon>
+            </ion-item>
+          </app-input>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="12"
+                 size-md="10"
+                 offset-md="1">
+          <app-input name="description"
+                     label="Descrição"
+                     type="textarea"
+                     [maxlength]="200"
+                     [initialValue]="form.controls['description'].value"
+                     (value)="changeControl('description', $event)">
+            <ion-item *ngIf="form.controls['description'].invalid && (form.controls['description'].dirty || form.controls['description'].touched)"
+                      class="validation-note"
+                      lines="none">
+              <div>
+                <ion-label *ngIf="form.controls['description'].errors?.['required']"
+                           color="danger">
+                  Preencha o Campo
+                </ion-label>
+                <ion-label *ngIf="form.controls['description'].errors?.['minlength']"
+                           color="danger">
+                  A descrição deve ter pelo menos 10 letras
+                </ion-label>
+                <ion-label *ngIf="form.controls['description'].errors?.['maxlength']"
+                           color="danger">
+                  A descrição deve ter até 200 letras
+                </ion-label>
+              </div>
+              <ion-icon name="warning"
+                        slot="end"
+                        color="danger"></ion-icon>
+            </ion-item>
+          </app-input>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <ion-buttons slot="end">
+      <ion-button fill="solid"
+                  color="danger"
+                  (click)="dismiss()">
+        <ion-icon name="close-sharp"
+                  slot="start"></ion-icon>
+        <ion-label>Cancelar</ion-label>
+      </ion-button>
+      <ion-button fill="solid"
+                  color="success"
+                  [disabled]="!form.valid || loaders.submit"
+                  (click)="submit()">
+        <ion-icon *ngIf="!loaders.submit"
+                  name="save-sharp"
+                  slot="start"></ion-icon>
+        <ion-spinner *ngIf="loaders.submit"
+                     slot="start"></ion-spinner>
+        <ion-label>{{ loaders.submit ? 'Salvando...': 'Salvar'}}</ion-label>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

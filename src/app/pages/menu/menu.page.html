@@ -1,0 +1,110 @@
+<ion-content>
+  <app-scroll-trigger id="menuTrigger"></app-scroll-trigger>
+  <div class="bg-image main">
+    <ion-grid class="grid">
+      <ion-row class="landing-row">
+        <ion-col class="ion-text-center">
+          <h1 class="superheadline">
+            Cardápio
+          </h1>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-grid
+              *ngIf="{selectedCategory: selectedCategory$ | async, categories: categoriesService.categories$ | async } as context">
+      <ion-row>
+        <ion-col size="12"
+                 size-md="3">
+          <ion-card>
+            <ion-card-header>
+              <h3 class="headline ion-text-center">Categorias</h3>
+            </ion-card-header>
+            <div class="category-list-wrapper ion-hide-md-down">
+              <ion-list class="category-list">
+                <div class="loader-center"
+                     *ngIf="!context.categories.length">
+                  <ion-spinner></ion-spinner>
+                </div>
+                <ng-container *ngIf="context.categories.length">
+                  <ion-item lines="none"
+                            [detail]="false"
+                            *ngFor="let category of context.categories"
+                            (click)="setFragment(category.slug)"
+                            [color]="context.selectedCategory?.id === category.id ? 'dark': 'light'"
+                            class="category-item"
+                            button>
+                    {{category.name}}
+                  </ion-item>
+                </ng-container>
+              </ion-list>
+            </div>
+            <ion-select class="ion-hide-md-up"
+                        [value]="selectInitialValue"
+                        (ionChange)="selectChange($event)">
+              <ion-select-option *ngFor="let category of context.categories"
+                                 [value]="category.slug">
+                {{category.name}}
+              </ion-select-option>
+            </ion-select>
+          </ion-card>
+
+        </ion-col>
+        <ion-col size="12"
+                 size-md="9"
+                 class="ion-no-padding">
+          <ion-row>
+            <ion-col size="12"
+                     size-md="6">
+              <h3 class="headline">{{context.selectedCategory?.name}}</h3>
+            </ion-col>
+            <ion-col size="12"
+                     size-md="6"
+                     class="search-column">
+              <app-input [placeholder]="'Pesquisar'"
+                         [name]="'search'"
+                         [initialValue]="initialValue"
+                         (value)="search($event)"></app-input>
+            </ion-col>
+          </ion-row>
+          <ion-row *ngIf="displayedProducts$ | async as displayProducts"
+                   class="products-row">
+            <ng-container *ngIf="displayProducts.length; else emptyResults">
+              <ion-col class="ion-no-padding product-col"
+                       size="12"
+                       size-sm="6"
+                       size-xl="4"
+                       *ngFor="let product of displayProducts">
+                <app-display-product [product]="product"></app-display-product>
+              </ion-col>
+            </ng-container>
+          </ion-row>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <app-footer></app-footer>
+  </div>
+</ion-content>
+
+<ion-fab vertical="bottom"
+         horizontal="end"
+         slot="fixed"
+         *ngIf="navigationService.headerState$ | async as status">
+  <ion-fab-button class="fade-element"
+                  [ngClass]="{hidden: !status.minimized}"
+                  size="small"
+                  (click)="scrollToTop()">
+    <ion-icon name="arrow-up-sharp"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+
+<ng-template #emptyResults>
+  <ion-col *ngIf="productService.productsLoaded$ | async; else loader">
+    <h2 class="headline">Não foi possível encontrar nenhum produto para essa
+      pesquisa</h2>
+  </ion-col>
+</ng-template>
+
+<ng-template #loader>
+  <div class="loader-center">
+  </div>
+</ng-template>

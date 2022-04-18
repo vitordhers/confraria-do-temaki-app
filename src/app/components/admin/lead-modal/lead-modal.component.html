@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Mensagem Id: {{lead.id}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="message-content">
+    Prezado Rhudner,
+    <br>
+    você recebeu uma mensagem referente a um contato para Franqueamento da Confraria do Temaki.
+    <br>
+    Seguem abaixo as informações do Interessado:
+    <br>
+    <table>
+      <tr>
+        <td><b>Nome</b></td>
+        <td>{{lead.name}}</td>
+      </tr>
+      <tr>
+        <td><b>Id no Banco de Dados</b></td>
+        <td>{{lead.id}}</td>
+      </tr>
+      <tr>
+        <td><b>E-mail</b></td>
+        <td>{{lead.email}}</td>
+      </tr>
+      <tr>
+        <td><b>Telefone</b></td>
+        <td>{{lead.telephone}}</td>
+      </tr>
+      <tr>
+        <td><b>Celular</b></td>
+        <td>{{lead.celphone}}</td>
+      </tr>
+      <tr>
+        <td><b>Cidade</b></td>
+        <td>{{lead.city}}</td>
+      </tr>
+      <tr>
+        <td><b>Estado</b></td>
+        <td>{{lead.state}}</td>
+      </tr>
+      <tr>
+        <td><b>Disposição de Investimento</b></td>
+        <td>
+          {{lead.investment}}
+        <td>
+      </tr>
+      <tr>
+        <td>
+          <b>Como conheceu a Confraria</b>
+        </td>
+        <td>
+          {{lead.reference}}
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <b>Mensagem</b>
+        </td>
+        <td>
+          {{lead.message}}
+        </td>
+      </tr>
+    </table>
+    <br>
+    <p>
+      Espero que essa seja uma boa parceria e que você consiga fechar negócio. 😃
+      Abraço!
+    </p>
+  </div>
+</ion-content>

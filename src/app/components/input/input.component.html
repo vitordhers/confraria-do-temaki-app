@@ -1,0 +1,38 @@
+<div class="input"
+     [ngClass]="{filled: toggleFilled, labeled: !!label}">
+  <ion-label *ngIf="label"
+             class="input-label">{{label}}</ion-label>
+  <ion-input *ngIf="type !=='select' && type !=='textarea'"
+             [type]="type"
+             [inputmode]="type"
+             [phoneType]="phoneType!"
+             [placeholder]="placeholder"
+             [maxlength]="maxlength"
+             (ionChange)="onValueChange($event)"
+             [value]="initialValue"
+             [appCellphoneBr]="type === 'tel'"
+             [ngClass]="{labeled: !!label}"
+             [appLettersAndDashes]="lettersAndDashes"
+             [min]="min"
+             [max]="max">
+  </ion-input>
+  <ion-select *ngIf="type ==='select'"
+              [value]="initialValue"
+              interface="popover"
+              [interfaceOptions]="interfaceOptions"
+              (ionChange)="onValueChange($event)">
+    <ion-select-option *ngFor="let option of options"
+                       [value]="option.value"
+                       class="ion-text-wrap">
+      <ion-label>
+        {{option.title}}
+      </ion-label>
+    </ion-select-option>
+  </ion-select>
+  <ion-textarea *ngIf="type ==='textarea'"
+                (ionChange)="onValueChange($event)"
+                [autoGrow]="true"
+                [maxlength]="maxlength"
+                [value]="initialValue"></ion-textarea>
+  <ng-content></ng-content>
+</div>

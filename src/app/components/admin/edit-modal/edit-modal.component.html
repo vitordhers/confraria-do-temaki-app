@@ -1,0 +1,41 @@
+<ion-list>
+  <ion-item *ngIf="isEditing"
+            color="success"
+            [disabled]="!valid"
+            (click)="update()"
+            button>
+    <ion-icon name="save-sharp"
+              slot="start"></ion-icon>
+    <ion-label>
+      Guardar
+    </ion-label>
+  </ion-item>
+  <ion-item *ngIf="isEditing"
+            (click)="cancel()"
+            button>
+    <ion-icon name="close-sharp"
+              slot="start"></ion-icon>
+    <ion-label>
+      Cancelar
+    </ion-label>
+  </ion-item>
+  <ion-item *ngIf="!isEditing"
+            (click)="edit()"
+            button>
+    <ion-icon name="pencil-sharp"
+              slot="start"></ion-icon>
+    <ion-label>
+      Editar
+    </ion-label>
+  </ion-item>
+  <ion-item *ngIf="!isEditing"
+            (click)="delete()"
+            color="danger"
+            button>
+    <ion-icon name="trash-bin-sharp"
+              slot="start"></ion-icon>
+    <ion-label>
+      Deletar
+    </ion-label>
+  </ion-item>
+</ion-list>
