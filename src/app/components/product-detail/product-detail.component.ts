@@ -90,7 +90,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   imgSrc: string;
   imageHovered = false;
   acceptedExtensions = ['image/png', 'image/jpeg', 'image/jpg'];
-  fileMaxSizeInBytes = 5e6;
+  fileMaxSizeInBytes = 26214400;
 
   progress = 0;
   displayProgressBar = false;
@@ -485,9 +485,16 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
   addNewIngredient() {
     this.addPriceForm.markAllAsTouched();
     if (this.addIngredientsForm.valid) {
-      const formGroup = this.mapPriceToFormGroup({
-        ...this.addIngredientsForm.value,
-      });
+      const formControls: FormControl[] =
+        this.addIngredientsForm.value.options?.map((option) =>
+          this.mapValueToFormControl(option)
+        );
+      const formGroup = this.mapIngredientToFormGroup(
+        {
+          ...this.addIngredientsForm.value,
+        },
+        formControls
+      );
 
       this.getControlFormArray('ingredients').push(formGroup);
       this.editProductForm.get('ingredients')?.markAsTouched();
@@ -662,9 +669,9 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
         if (file.size > this.fileMaxSizeInBytes) {
           return fireToast(
             'Arquivo inválido',
-            `Por favor, selecione uma imagem com extensão ${this.acceptedExtensions.join(
-              ' ou '
-            )}.`,
+            `Por favor, selecione uma imagem menos de ${Math.round(
+              this.fileMaxSizeInBytes / 1048576
+            )} Mb.`,
             'error'
           );
         }

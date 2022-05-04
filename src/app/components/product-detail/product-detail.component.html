@@ -629,7 +629,8 @@
              let-mode="mode">
   <ion-buttons slot="end">
     <ion-button shape="round"
-                (click)="mode === 'add' ? openAddPopover($event, i, controlName) : openEditPopover($event, i, controlName)">
+                (click)="mode === 'add' ? openAddPopover($event, i, controlName) : openEditPopover($event, i, controlName)"
+                [disabled]="(mode === 'add' && !!isEditingIndexes[controlName]) || (mode !== 'add' && isAddingIndexes[controlName])">
       <ion-icon name="ellipsis-vertical-sharp"></ion-icon>
     </ion-button>
   </ion-buttons>
