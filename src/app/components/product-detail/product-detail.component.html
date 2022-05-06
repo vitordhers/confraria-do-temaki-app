@@ -185,11 +185,25 @@
                     fill="solid"
                     [disabled]="!canSave"
                     (click)="save()">
-          <ion-icon name="save-sharp"
-                    slot="start"></ion-icon>
-          <ion-label>
-            {{product.id ? 'Salvar' : 'Adicionar'}}
-          </ion-label>
+          <ng-container *ngIf="!loaders.savingImage && !loaders.savingProduct">
+            <ion-icon [name]="product.id ? 'save-sharp' : 'add-sharp'"
+                      slot="start"></ion-icon>
+            <ion-label>
+              {{product.id ? 'Salvar' : 'Adicionar'}}
+            </ion-label>
+          </ng-container>
+          <ng-container *ngIf="loaders.savingImage && !loaders.savingProduct">
+            <ion-spinner></ion-spinner>
+            <ion-label>
+              Fazendo upload da imagem...
+            </ion-label>
+          </ng-container>
+          <ng-container *ngIf="!loaders.savingImage && loaders.savingProduct">
+            <ion-spinner></ion-spinner>
+            <ion-label>
+              {{product.id ? 'Salvando...' : 'Adicionando...'}}
+            </ion-label>
+          </ng-container>
         </ion-button>
       </ion-buttons>
     </ion-toolbar>

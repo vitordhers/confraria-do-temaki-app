@@ -69,7 +69,7 @@ export class MenuPage implements OnInit {
             )
           : [];
         if (fragment) {
-          if (fragment.startsWith('@')) {
+          if (fragment && fragment.startsWith('@')) {
             this.initialValue = fragment.substring(1);
 
             displayedProducts = products.filter((product) =>

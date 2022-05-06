@@ -18,7 +18,6 @@ import { ProductService } from '../../services/product.service';
 import { UnitService } from '../../services/unit.service';
 import { ProductDetail } from '../../shared/models/product-detail.model';
 import { IPrice } from '../../shared/interfaces/price.interface';
-import { IProduct } from '../../shared/interfaces/product.interface';
 import { IIngredient } from '../../shared/interfaces/ingredient.interface';
 import { IResponse } from '../../shared/interfaces/response.interface';
 import { EditModalComponent } from '../admin/edit-modal/edit-modal.component';
@@ -69,6 +68,8 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     notes: undefined,
     ingredients: undefined,
   };
+
+  loaders = { savingImage: false, savingProduct: false };
 
   canSave = true;
 
@@ -598,6 +599,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
 
   save() {
     if (this.editProductForm.valid) {
+      this.loaders.savingProduct = true;
       const payload = this.editProductForm.value;
       const source$ = payload.id
         ? this.isAdmin
@@ -615,6 +617,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
           });
       source$.subscribe({
         next: (result) => {
+          this.loaders.savingProduct = false;
           if (result.success && result.payload) {
             fireSuccess(
               payload,
@@ -625,13 +628,15 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
           }
           fireError(payload, 'O Produto', payload.id ? 'atualizado' : 'criado');
         },
-        error: (err) =>
+        error: (err) => {
+          this.loaders.savingProduct = false;
           fireError(
             payload,
             'O Produto',
             payload.id ? 'atualizado' : 'criado',
             err
-          ),
+          );
+        },
       });
     }
     this.editProductForm.markAllAsTouched();
@@ -698,6 +703,7 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
     const imageBlob = await (await fetch(imageDataUrl)).blob();
     const thumbnailBlob = await (await fetch(thumbnailDataUrl)).blob();
 
+    this.loaders.savingImage = true;
     this.productService
       .uploadImageAndThumbnail(imageBlob, thumbnailBlob)
       .subscribe(
@@ -708,16 +714,22 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
             >
           >
         ) => {
+          this.loaders.savingImage = true;
           switch (event.type) {
             case HttpEventType.Sent:
+              this.canSave = false;
               this.displayProgressBar = true;
               break;
             case HttpEventType.UploadProgress:
+              this.canSave = false;
               this.progress = Math.round(
                 (event.loaded / (event.total as number)) * 100
               );
               break;
             case HttpEventType.Response:
+              this.loaders.savingImage = false;
+              this.canSave = true;
+              this.displayProgressBar = false;
               if (event.body.success) {
                 fireToast(
                   'Imagem enviada com sucesso',
@@ -734,7 +746,12 @@ export class ProductDetailComponent implements OnInit, OnDestroy {
                 }, 300);
               }
               fireToast('Erro no upload', 'Favor comunicar', 'error');
-              this.displayProgressBar = false;
+
+              break;
+            default:
+              fireToast('Erro no upload', 'Favor comunicar', 'error');
+              this.loaders.savingImage = false;
+              this.canSave = true;
           }
         }
       );

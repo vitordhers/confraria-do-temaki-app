@@ -80,7 +80,7 @@ export class ProductsPage implements OnInit {
               p.categoriesIds.includes(this.selectedCategory$.value.id)
             )
           : [];
-        if (fragment.startsWith('@')) {
+        if (fragment && fragment.startsWith('@')) {
           this.initialValue = fragment.substring(1);
 
           displayedProducts = products.filter((product) =>
