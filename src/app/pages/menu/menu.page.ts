@@ -8,7 +8,7 @@ import { UnitService } from '../../services/unit.service';
 import { ProductService } from '../../services/product.service';
 import { IProduct } from '../../shared/interfaces/product.interface';
 import { CategoriesService } from '../../services/categories.service';
-import { IonContent } from '@ionic/angular';
+import { IonContent, Platform } from '@ionic/angular';
 import { NavigationService } from 'src/app/services/navigation.service';
 
 @Component({
@@ -26,6 +26,8 @@ export class MenuPage implements OnInit {
   });
   public displayedProducts$: Observable<ProductDisplay[]>;
   public selectInitialValue: string;
+  public categoriesOptions$: Observable<{ value: string; title: string }[]>;
+  public isMobile: boolean;
 
   private storedCategoryId$ = new BehaviorSubject<string>('');
 
@@ -33,10 +35,13 @@ export class MenuPage implements OnInit {
     public productService: ProductService,
     public categoriesService: CategoriesService,
     public navigationService: NavigationService,
+    public platform: Platform,
     private unitService: UnitService,
     private activatedRoute: ActivatedRoute,
     private router: Router
-  ) {}
+  ) {
+    this.isMobile = platform.is('mobile');
+  }
 
   ngOnInit() {
     this.displayedProducts$ = combineLatest([
@@ -111,10 +116,16 @@ export class MenuPage implements OnInit {
         );
       })
     );
+
+    this.categoriesOptions$ = this.categoriesService.categories$.pipe(
+      map((categories) =>
+        categories.map((c) => ({ value: c.slug, title: c.name }))
+      )
+    );
   }
 
-  selectChange(e: any) {
-    this.setFragment(e.detail.value);
+  selectChange(categorySlug: string) {
+    this.setFragment(categorySlug);
   }
 
   setFragment(fragment: string, search = false) {

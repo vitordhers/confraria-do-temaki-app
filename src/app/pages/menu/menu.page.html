@@ -11,7 +11,7 @@
       </ion-row>
     </ion-grid>
     <ion-grid
-              *ngIf="{selectedCategory: selectedCategory$ | async, categories: categoriesService.categories$ | async } as context">
+              *ngIf="{selectedCategory: selectedCategory$ | async, categories: categoriesService.categories$ | async, categoriesOptions: categoriesOptions$ | async } as context">
       <ion-row>
         <ion-col size="12"
                  size-md="3">
@@ -38,14 +38,15 @@
                 </ng-container>
               </ion-list>
             </div>
-            <ion-select class="ion-hide-md-up"
-                        [value]="selectInitialValue"
-                        (ionChange)="selectChange($event)">
-              <ion-select-option *ngFor="let category of context.categories"
-                                 [value]="category.slug">
-                {{category.name}}
-              </ion-select-option>
-            </ion-select>
+            <ng-container *ngIf="context.categoriesOptions.length && isMobile">
+              <app-input name="state"
+                         type="select"
+                         placeholder="Clique para selecionar"
+                         [initialValue]="'SP'"
+                         [options]="context.categoriesOptions"
+                         (value)="selectChange($event)">
+              </app-input>
+            </ng-container>
           </ion-card>
 
         </ion-col>

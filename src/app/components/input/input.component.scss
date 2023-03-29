@@ -13,13 +13,11 @@
     outline-width: 0;
   }
 
-  &::placeholder {
-    color: #fff;
-    opacity: 60%;
-  }
-
   ion-input {
     padding-top: 0px;
+    --padding-start: 5px;
+    --placeholder-color: #fff;
+    --placeholder-opacity: 60%;
   }
   ion-input.labeled {
     margin-top: 7px;
@@ -60,4 +58,9 @@
 
 ion-select::part(icon) {
   opacity: 1;
+}
+
+ion-select::part(placeholder) {
+  color: #000;
+  opacity: 0.8;
 }

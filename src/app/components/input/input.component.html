@@ -19,6 +19,7 @@
   <ion-select *ngIf="type ==='select'"
               [value]="initialValue"
               interface="popover"
+              [placeholder]="placeholder"
               [interfaceOptions]="interfaceOptions"
               (ionChange)="onValueChange($event)">
     <ion-select-option *ngFor="let option of options"

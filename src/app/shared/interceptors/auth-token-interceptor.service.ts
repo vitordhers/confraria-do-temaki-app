@@ -12,7 +12,6 @@ import {
   switchMap,
   take,
   throwError,
-  withLatestFrom,
 } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { AuthService } from '../../services/auth.service';
@@ -27,6 +26,9 @@ export class Interceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler) {
     return this.authService.accessToken.pipe(
       switchMap((accessToken) => {
+        if (!accessToken) {
+          return next.handle(request);
+        }
         if (accessToken) {
           request = this.addAccessToken(request, accessToken);
         }
@@ -34,6 +36,9 @@ export class Interceptor implements HttpInterceptor {
         return next.handle(request).pipe(
           catchError((error) => {
             if (error instanceof HttpErrorResponse && error.status === 401) {
+              if (error.url === `${environment.apiUrl}/auth/token`) {
+                this.authService.logout();
+              }
               return this.handle401Error(request, next);
             }
             return throwError(() => new Error(error));
