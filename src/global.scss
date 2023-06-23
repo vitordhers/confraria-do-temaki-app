@@ -215,3 +215,7 @@ ion-button {
 .native-textarea {
   min-height: 40px;
 }
+
+ion-popover [popover]:not(:popover-open):not(dialog[open]) {
+  display: contents;
+}
