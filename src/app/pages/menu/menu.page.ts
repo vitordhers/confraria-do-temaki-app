@@ -20,9 +20,9 @@ export class MenuPage implements OnInit {
   @ViewChild(IonContent) content: IonContent;
   public initialValue?: string;
   public selectedCategory$ = new BehaviorSubject({
-    id: 'd6e6aafb-4ba2-40fa-955f-ee6ddfa2502c',
-    name: 'Temakis',
-    slug: 'temakis',
+    id: '23a84f3a-357b-45d8-82be-435416fb2ae8',
+    name: 'Entradas',
+    slug: 'entradas',
   });
   public displayedProducts$: Observable<ProductDisplay[]>;
   public selectInitialValue: string;
